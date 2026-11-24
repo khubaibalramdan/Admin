@@ -34,13 +34,6 @@ button,input{font:inherit;color:inherit}
 .brand small{font:500 9px/1 Montserrat,sans-serif;letter-spacing:.38em;color:var(--mute)}
 .ib{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer}
 .ib svg{width:19px;height:19px}
-.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:4px 16px 10px}
-.st{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 6px 8px;text-align:center;cursor:pointer;box-shadow:var(--sh);transition:border-color .15s}
-.st b{display:block;font:700 22px/1.1 Montserrat,sans-serif}
-.st span{font-size:11px;color:var(--mute)}
-.st.on{border-color:currentColor}
-.st[data-g=trial]{color:var(--trial)}.st[data-g=paid]{color:var(--paid)}.st[data-g=expired]{color:var(--exp)}.st[data-g=blocked]{color:var(--blk)}
-.st span{color:var(--mute)}
 .bar{display:flex;gap:8px;padding:0 16px 10px}
 .seg{display:grid;grid-template-columns:1fr 1fr;background:var(--soft);border-radius:12px;padding:3px;flex:none;width:168px}
 .seg button{border:0;background:none;border-radius:9px;height:38px;font-size:13px;font-weight:500;color:var(--mute);cursor:pointer}
@@ -48,8 +41,6 @@ button,input{font:inherit;color:inherit}
 .search{flex:1;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);padding:0 12px;font-size:16px;outline:none;direction:ltr;text-align:right}
 .search:focus{border-color:var(--gold)}
 .list{overflow-y:auto;padding:0 16px calc(env(safe-area-inset-bottom,0px) + 90px);overscroll-behavior:contain}
-.gh{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mute);margin:14px 2px 8px}
-.gh i{flex:1;height:1px;background:var(--line)}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:var(--sh);cursor:pointer}
 .row{display:flex;align-items:center;gap:8px}
 .nm{font-weight:700;font-size:14px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -61,9 +52,7 @@ button,input{font:inherit;color:inherit}
 .idb{display:flex;align-items:center;gap:10px;border:1px dashed var(--line);border-radius:10px;padding:8px 10px;direction:ltr;cursor:copy}
 .idb small{flex:none;width:92px;font:500 9px/1.2 Montserrat,sans-serif;letter-spacing:.16em;color:var(--mute)}
 .idb div{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.prog{height:4px;border-radius:4px;background:var(--soft);margin-top:12px;overflow:hidden}
-.prog i{display:block;height:100%;border-radius:4px}
-.g-trial .prog i{background:var(--trial)}.g-paid .prog i{background:var(--paid)}.vip{font:700 10px/1 Montserrat,sans-serif;letter-spacing:.12em}
+.vip{font:700 10px/1 Montserrat,sans-serif;letter-spacing:.12em}
 .meta{display:flex;justify-content:space-between;font-size:11px;color:var(--mute);margin-top:8px}
 .empty{text-align:center;color:var(--mute);padding:48px 0;font-size:13px}
 .sk{height:132px;border-radius:16px;background:linear-gradient(90deg,var(--soft),var(--card),var(--soft));background-size:200% 100%;animation:sk 1.2s infinite linear;margin-bottom:10px}
@@ -125,12 +114,6 @@ button,input{font:inherit;color:inherit}
     <button class="ib" id="theme" aria-label="الوضع"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5Z"/></svg></button>
     <button class="ib" id="gear" aria-label="الإعدادات"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></button>
   </header>
-  <section class="stats" id="stats">
-    <div class="st" data-g="trial"><b id="c-trial">–</b><span>تجربة</span></div>
-    <div class="st" data-g="paid"><b id="c-paid">–</b><span>VIP</span></div>
-    <div class="st" data-g="expired"><b id="c-expired">–</b><span>منتهي</span></div>
-    <div class="st" data-g="blocked"><b id="c-blocked">–</b><span>محظور</span></div>
-  </section>
   <div class="bar">
     <div class="seg"><button class="on" data-t="dev">الأجهزة</button><button data-t="codes">الأكواد</button></div>
     <input class="search mono" id="q" placeholder="ID" inputmode="search" autocomplete="off">
@@ -150,7 +133,7 @@ const esc = v => String(v == null ? "" : v).replace(/[&<>"']/g, c => ({"&":"&amp
 const store = { get(k){ try { return localStorage.getItem(k); } catch(e) { return null; } }, set(k,v){ try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k,v); } catch(e) {} } };
 const ERR = { ADMIN_UNAUTHORIZED:"ADMIN_KEY غلط", UNAUTHORIZED:"API_TOKEN غلط", SERVER_BUSY:"الخادم مشغول، أعد المحاولة", INVALID_CODE_DURATION:"مدة غير صالحة", INVALID_TRIAL_DAYS:"مدة غير صالحة", INVALID_EXTENSION_DAYS:"مدة غير صالحة", DEVICE_NOT_FOUND:"الجهاز غير موجود", CODE_ALREADY_REDEEMED:"الكود مستخدم", INVALID_DEVICE_ID:"رقم جهاز غير صالح" };
 const GL = { trial:"تجربة", paid:"VIP", expired:"منتهي", blocked:"محظور" };
-let key = store.get("mtk"), data = null, tab = "dev", filter = "", sel = null;
+let key = store.get("mtk"), data = null, tab = "dev", sel = null;
 
 if (store.get("mtt") === "dark") document.documentElement.classList.add("dark");
 $("#theme").onclick = () => { const d = document.documentElement.classList.toggle("dark"); store.set("mtt", d ? "dark" : "light"); };
@@ -216,15 +199,9 @@ const pill = d => d.group === "paid" ? '<bdi class="vip">VIP</bdi> · ' + (d.per
 
 function devCard(d) {
   const isNew = data.now - d.created < 86400000;
-  const pct = d.group === "trial" ? Math.min(100, d.daysLeft / Math.max(1, data.defaultTrialDays) * 100) : d.group === "paid" ? (d.permanent ? 100 : Math.min(100, d.daysLeft / 30 * 100)) : 0;
   return `<div class="card g-${d.group}" data-id="${esc(d.id)}">
     <div class="row"><div class="nm"><bdi>${esc(d.model || d.name || "Android")}</bdi></div>${isNew ? '<span class="new">NEW</span>' : ""}<span class="pill">${pill(d)}</span></div>
-    <div class="ids">
-      <div class="idb" data-c="${esc(d.id)}"><small>DEVICE</small><div class="mono">${fmtId(d.id)}</div></div>
-      ${d.activation ? `<div class="idb" data-c="${esc(d.activation.activationId)}"><small>VERIFICATION</small><div class="mono">${shortAct(d.activation.activationId)}</div></div>` : ""}
-    </div>
-    ${pct ? `<div class="prog"><i style="width:${pct}%"></i></div>` : ""}
-    <div class="meta"><span><bdi>${d.app ? "v" + esc(d.app) : ""}</bdi></span><span>${d.activation ? "وُثّق " + dt(d.activation.at) : "انضم " + dt(d.created)}</span></div>
+    <div class="meta"><span class="mono" dir="ltr">…${esc(d.id.replace(/-/g, "").slice(-4))}</span><span><bdi>${d.app ? "v" + esc(d.app) : ""}</bdi></span></div>
   </div>`;
 }
 function codeCard(c) {
@@ -234,10 +211,6 @@ function codeCard(c) {
 }
 function render() {
   if (!data) return;
-  const cnt = { trial:0, paid:0, expired:0, blocked:0 };
-  data.devices.forEach(d => cnt[d.group]++);
-  Object.keys(cnt).forEach(g => $("#c-" + g).textContent = cnt[g]);
-  document.querySelectorAll(".st").forEach(el => el.classList.toggle("on", el.dataset.g === filter));
   $("#fab").classList.toggle("show", tab === "codes");
   document.querySelector('.seg button[data-t="codes"]').classList.toggle("hide", !!data.legacy);
   const q = $("#q").value.trim().toUpperCase().replace(/[\s·-]/g, "");
@@ -249,10 +222,10 @@ function render() {
   }
   const order = ["trial", "paid", "expired", "blocked"];
   let html = "";
-  order.filter(g => !filter || g === filter).forEach(g => {
+  order.forEach(g => {
     const ds = data.devices.filter(d => d.group === g && (!q || d.id.replace(/-/g, "").indexOf(q) >= 0 || (d.activation && d.activation.activationId.toUpperCase().indexOf(q) >= 0)))
       .sort((a, b) => g === "trial" ? a.daysLeft - b.daysLeft || b.created - a.created : b.created - a.created);
-    if (ds.length) html += `<div class="gh"><span>${GL[g]}</span><span class="lat">${ds.length}</span><i></i></div>` + ds.map(devCard).join("");
+    html += ds.map(devCard).join("");
   });
   L.innerHTML = html || '<div class="empty">لا توجد أجهزة</div>';
 }
@@ -327,7 +300,6 @@ $("#list").addEventListener("click", e => {
   const c = e.target.closest(".card[data-id]");
   if (c && data) { const d = data.devices.find(x => x.id === c.dataset.id); if (d) deviceSheet(d); }
 });
-document.querySelectorAll(".st").forEach(el => el.onclick = () => { filter = filter === el.dataset.g ? "" : el.dataset.g; if (tab !== "dev") setTab("dev"); render(); });
 function setTab(t) { tab = t; document.querySelectorAll(".seg button").forEach(b => b.classList.toggle("on", b.dataset.t === t)); render(); }
 document.querySelectorAll(".seg button").forEach(b => b.onclick = () => setTab(b.dataset.t));
 $("#q").addEventListener("input", render);
