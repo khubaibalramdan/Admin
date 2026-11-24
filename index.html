@@ -35,9 +35,10 @@ button,input{font:inherit;color:inherit}
 .ib{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer}
 .ib svg{width:19px;height:19px}
 .bar{display:flex;gap:8px;padding:0 16px 10px}
-.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--soft);border-radius:12px;padding:3px;flex:none;width:168px}
-.seg button{border:0;background:none;border-radius:9px;height:38px;font-size:13px;font-weight:500;color:var(--mute);cursor:pointer}
-.seg button.on{background:var(--card);color:var(--ink);box-shadow:var(--sh)}
+.seg,.mseg{display:grid;grid-template-columns:1fr 1fr;background:var(--soft);border-radius:12px;padding:3px;flex:none;width:168px}
+.mseg{width:auto}
+.seg button,.mseg button{border:0;background:none;border-radius:9px;height:38px;font-size:13px;font-weight:500;color:var(--mute);cursor:pointer}
+.seg button.on,.mseg button.on{background:var(--card);color:var(--ink);box-shadow:var(--sh)}
 .search{flex:1;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);padding:0 12px;font-size:16px;outline:none;direction:ltr;text-align:right}
 .search:focus{border-color:var(--gold)}
 .list{overflow-y:auto;padding:0 16px calc(env(safe-area-inset-bottom,0px) + 90px);overscroll-behavior:contain}
@@ -67,14 +68,10 @@ button,input{font:inherit;color:inherit}
 .btn:disabled{opacity:.5}
 .in{height:48px;border-radius:12px;border:1px solid var(--line);background:var(--bg);padding:0 12px;font-size:16px;outline:none;width:100%;text-align:center}
 .in:focus{border-color:var(--gold)}
-.chips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
-.chip{height:40px;border-radius:10px;border:1px solid var(--line);background:var(--card);font:600 13px Montserrat,sans-serif;cursor:pointer}
-.chip.on{border-color:var(--ink);background:var(--ink);color:var(--bg)}
-.scrim{position:fixed;inset:0;background:rgba(10,10,12,.42);opacity:0;pointer-events:none;transition:opacity .2s}
-.scrim.on{opacity:1;pointer-events:auto}
-.sheet{position:fixed;left:0;right:0;bottom:0;max-width:720px;margin:0 auto;max-height:88%;overflow-y:auto;background:var(--card);border-radius:22px 22px 0 0;padding:10px 18px calc(env(safe-area-inset-bottom,0px) + 22px);transform:translateY(105%);transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+.sheet{position:fixed;inset:0;max-width:720px;margin:0 auto;overflow-y:auto;background:var(--bg);padding:calc(env(safe-area-inset-top,0px) + 14px) 18px calc(env(safe-area-inset-bottom,0px) + 22px);transform:translateX(-105%);transition:transform .25s cubic-bezier(.2,.8,.2,1);z-index:20}
+.ph{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.ph .nm{font-size:16px}
 .sheet.on{transform:none}
-.grab{width:40px;height:4px;border-radius:4px;background:var(--line);margin:0 auto 14px}
 .sec{border-top:1px solid var(--line);padding:14px 0;display:grid;gap:10px}
 .sec h4{margin:0;font-size:13px;color:var(--mute);font-weight:500}
 .pair{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
@@ -122,7 +119,6 @@ button,input{font:inherit;color:inherit}
 </div>
 <button class="fab" id="fab">إصدار كود</button>
 
-<div class="scrim" id="scrim"></div>
 <div class="sheet" id="sheet"></div>
 <div class="toast" id="toast"></div>
 
@@ -233,40 +229,50 @@ function load() {
   return api("overview").then(r => { data = r; render(); }, fail);
 }
 
-function openSheet(html) { $("#sheet").innerHTML = '<div class="grab"></div>' + html; $("#sheet").classList.add("on"); $("#scrim").classList.add("on"); }
-function closeSheet() { $("#sheet").classList.remove("on"); $("#scrim").classList.remove("on"); sel = null; }
-$("#scrim").onclick = closeSheet;
-
-function daysPicker(id, def) {
-  return `<div class="chips" data-for="${id}">${[7, 30, 90, 365].map(n => `<button class="chip${n === def ? " on" : ""}" data-n="${n}">${n}</button>`).join("")}</div>
-    <input class="in lat" id="${id}" inputmode="numeric" value="${def}">`;
+// Full-page view with its own back button; the phone's back button closes it too.
+let sheetOpen = false;
+const BACK = '<button class="ib" data-back aria-label="رجوع"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>';
+function openSheet(title, html) {
+  $("#sheet").innerHTML = `<div class="ph">${BACK}<div class="nm">${title}</div></div>` + html;
+  $("#sheet").scrollTop = 0; $("#sheet").classList.add("on");
+  if (!sheetOpen) { try { history.pushState({ sheet: 1 }, ""); } catch(e) {} }
+  sheetOpen = true;
 }
+function hideSheet() { $("#sheet").classList.remove("on"); sheetOpen = false; sel = null; }
+function closeSheet() { if (sheetOpen && history.state && history.state.sheet) history.back(); else hideSheet(); }
+window.addEventListener("popstate", () => { if (sheetOpen) hideSheet(); });
+
 function deviceSheet(d) {
   sel = d.id;
-  openSheet(`
-    <div class="row g-${d.group}"><div class="nm"><bdi>${esc(d.model || d.name || "Android")}</bdi></div><span class="pill">${pill(d)}</span></div>
+  openSheet(`<bdi>${esc(d.model || d.name || "Android")}</bdi>`, `
+    <div class="row g-${d.group}"><span class="pill">${pill(d)}</span></div>
     <div class="ids" style="margin-bottom:14px"><div class="idb" data-c="${esc(d.id)}"><small>DEVICE</small><div class="mono">${fmtId(d.id)}</div></div>
       <div class="idb" data-c="${esc(d.activation ? d.activation.activationId : "")}"><small>VERIFICATION</small><div class="mono">${d.activation ? shortAct(d.activation.activationId) : "—"}</div></div></div>
-    <div class="sec"><h4>إصدار كود لهذا الجهاز</h4>${daysPicker("cd", 30)}<button class="btn" data-a="code">إصدار</button><div id="res"></div></div>
-    <div class="sec"><h4>تمديد</h4><div class="pair"><input class="in lat" id="ex" inputmode="numeric" value="30"><button class="btn ghost" data-a="extend">تمديد</button></div></div>
-    <div class="sec"><h4>مدة التجربة</h4><div class="pair"><input class="in lat" id="tr" inputmode="numeric" value="${data.defaultTrialDays}"><button class="btn ghost" data-a="trial">حفظ</button></div></div>
+    <div class="sec">
+      <div class="mseg"><button class="on" data-m="days">أيام</button><button data-m="perm">مؤبد</button></div>
+      <div id="m-days" class="pair"><input class="in lat" id="cd" inputmode="numeric" placeholder="عدد الأيام"><button class="btn" data-a="code">إصدار كود</button></div>
+      <div id="m-perm" class="hide" style="display:grid">${d.permanent ? '<button class="btn" disabled>مفعّل مؤبد</button>' : '<button class="btn" data-a="perm">تفعيل مؤبد</button>'}</div>
+      <div id="res"></div>
+    </div>
     <div class="sec">${d.group === "blocked" ? '<button class="btn ghost" data-a="unblock">إلغاء الحظر</button>' : '<button class="btn red" data-a="block">حظر</button>'}</div>`);
 }
 function codeSheet() {
-  openSheet(`<div class="nm" style="margin-bottom:6px">كود لأي جهاز</div>
-    <div class="sec"><h4>المدة بالأيام</h4>${daysPicker("cd", 30)}<button class="btn" data-a="code">إصدار</button><div id="res"></div></div>`);
+  openSheet("كود لأي جهاز", `<div class="sec" style="border-top:0">
+    <div class="pair"><input class="in lat" id="cd" inputmode="numeric" placeholder="عدد الأيام"><button class="btn" data-a="code">إصدار كود</button></div><div id="res"></div></div>`);
 }
 function settingsSheet() {
-  openSheet(`<div class="nm" style="margin-bottom:6px">الإعدادات</div>
-    <div class="sec"><h4>التجربة الافتراضية للأجهزة الجديدة</h4><div class="pair"><input class="in lat" id="dt" inputmode="numeric" value="${data ? data.defaultTrialDays : 3}"><button class="btn ghost" data-a="deftrial">حفظ</button></div></div>
+  openSheet("الإعدادات", `
+    <div class="sec" style="border-top:0"><h4>مدة التجربة للأجهزة الجديدة</h4><div class="pair"><input class="in lat" id="dt" inputmode="numeric" value="${data ? data.defaultTrialDays : 3}"><button class="btn ghost" data-a="deftrial">حفظ</button></div></div>
+    <div class="sec"><div class="pair"><input class="in lat" id="ea" inputmode="numeric" placeholder="عدد الأيام"><button class="btn ghost" data-a="extall">تمديد للكل</button></div></div>
     <div class="sec"><button class="btn ghost" data-a="logout">تسجيل الخروج</button></div>`);
 }
 function busy(btn, on) { if (btn) btn.disabled = on; }
 function num(id) { const n = parseInt(($("#" + id) || {}).value, 10); return isNaN(n) ? -1 : n; }
 
 $("#sheet").addEventListener("click", e => {
-  const chip = e.target.closest(".chip");
-  if (chip) { const box = chip.parentElement; box.querySelectorAll(".chip").forEach(c => c.classList.toggle("on", c === chip)); $("#" + box.dataset.for).value = chip.dataset.n; return; }
+  if (e.target.closest("[data-back]")) return closeSheet();
+  const m = e.target.closest("[data-m]");
+  if (m) { m.parentElement.querySelectorAll("button").forEach(x => x.classList.toggle("on", x === m)); $("#m-days").classList.toggle("hide", m.dataset.m !== "days"); $("#m-perm").classList.toggle("hide", m.dataset.m !== "perm"); return; }
   const cp = e.target.closest("[data-c]"); if (cp) { if (cp.dataset.c) copy(cp.dataset.c); return; }
   const b = e.target.closest("[data-a]"); if (!b) return;
   const a = b.dataset.a;
@@ -281,8 +287,26 @@ $("#sheet").addEventListener("click", e => {
       copy(c.code); load();
     }, fail).then(() => busy(b, false));
   }
-  if (a === "extend") { const n = num("ex"); if (n < 1 || n > 3650) return toast("مدة غير صالحة"); p = { deviceId: sel, extendDays: n }; }
-  if (a === "trial") { const n = num("tr"); if (n < 0 || n > 365) return toast("مدة غير صالحة"); p = { deviceId: sel, trialDays: n }; }
+  if (a === "perm") p = { deviceId: sel, permanent: true };
+  if (a === "extall") {
+    const n = num("ea"); if (n < 1 || n > 365) return toast("مدة غير صالحة");
+    if (!b.dataset.ok) { b.dataset.ok = "1"; b.textContent = "تأكيد التمديد"; return; }
+    // Every device not on VIP and not blocked gets n more trial days (expired ones: n days from today).
+    const now = Date.now(), D = 86400000;
+    const list = (data ? data.devices : []).filter(d => (d.group === "trial" || d.group === "expired") && d.created);
+    if (!list.length) return toast("لا توجد أجهزة");
+    busy(b, true);
+    let i = 0;
+    const next = () => {
+      if (i >= list.length) { toast("تم تمديد " + list.length); closeSheet(); return load(); }
+      const d = list[i++];
+      const base = d.group === "trial" && d.end ? d.end : now;
+      const len = Math.min(365, Math.ceil((base - d.created) / D) + n);
+      b.textContent = i + " / " + list.length;
+      return api("update_device", { deviceId: d.id, trialDays: len }).then(next);
+    };
+    return next().catch(fail).then(() => busy(b, false));
+  }
   if (a === "block") p = { deviceId: sel, blocked: true };
   if (a === "unblock") p = { deviceId: sel, blocked: false };
   if (a === "deftrial") {
