@@ -85,6 +85,9 @@ button,input{font:inherit;color:inherit}
 .login .mk svg{width:44px;height:44px}
 .login small{font:300 11px/1 Montserrat,sans-serif;letter-spacing:.5em;color:var(--mute);margin-bottom:22px}
 .hide{display:none!important}
+.card.act{border-color:var(--paid)}
+.card.act .pill{background:var(--paid);color:#fff}.card.act .pill .vip{color:#fff}
+.done{display:flex;align-items:center;justify-content:center;gap:8px;height:52px;border-radius:12px;background:var(--paid);color:#fff;font-weight:700;font-size:16px}
 .lab{font:600 11px/1 Montserrat,sans-serif;letter-spacing:.16em;color:var(--mute);text-align:left;direction:ltr;margin:4px 2px -8px}
 </style>
 </head>
@@ -190,11 +193,12 @@ const shortAct = a => a ? "ACT · " + esc(a.replace(/^ACT_/, "").slice(-8)) : ""
 const dt = ms => ms ? "<bdi>" + new Date(ms).toLocaleDateString("en-GB", { day:"2-digit", month:"short" }) + "</bdi>" : "—";
 const left = d => d.group === "paid" ? (d.permanent ? "دائم" : (d.daysLeft === 1 ? "يوم" : d.daysLeft === 2 ? "يومين" : d.daysLeft + " يوم"))
   : d.group === "trial" ? (d.daysLeft <= 1 ? "باقي يوم" : d.daysLeft === 2 ? "باقي يومين" : "باقي " + d.daysLeft + " أيام") : "";
-const pill = d => d.group === "paid" ? '<bdi class="vip">VIP</bdi> · ' + (d.permanent ? "دائم" : "باقي " + left(d)) : esc(d.group === "trial" ? left(d) : GL[d.group]);
+const pill = d => d.group === "paid" ? '<bdi class="vip">VIP</bdi> · ' + (d.permanent ? "تم التفعيل ✓" : "باقي " + left(d)) : esc(d.group === "trial" ? left(d) : GL[d.group]);
 
+function hidden() { try { return JSON.parse(store.get("mth") || "[]"); } catch(e) { return []; } }
 function devCard(d) {
   const isNew = data.now - d.created < 86400000;
-  return `<div class="card g-${d.group}" data-id="${esc(d.id)}">
+  return `<div class="card g-${d.group}${d.permanent && d.group === "paid" ? " act" : ""}" data-id="${esc(d.id)}">
     <div class="row"><div class="nm"><bdi>${esc(d.model || d.name || "Android")}</bdi></div>${isNew ? '<span class="new">NEW</span>' : ""}<span class="pill">${pill(d)}</span></div>
     <div class="meta"><span class="mono" dir="ltr">…${esc(d.id.replace(/-/g, "").slice(-4))}</span><span><bdi>${d.app ? "v" + esc(d.app) : ""}</bdi></span></div>
   </div>`;
@@ -218,7 +222,8 @@ function render() {
   const order = ["trial", "paid", "expired", "blocked"];
   let html = "";
   order.forEach(g => {
-    const ds = data.devices.filter(d => d.group === g && (!q || d.id.replace(/-/g, "").indexOf(q) >= 0 || (d.activation && d.activation.activationId.toUpperCase().indexOf(q) >= 0)))
+    const hid = hidden();
+    const ds = data.devices.filter(d => d.group === g && hid.indexOf(d.id) < 0 && (!q || d.id.replace(/-/g, "").indexOf(q) >= 0 || (d.activation && d.activation.activationId.toUpperCase().indexOf(q) >= 0)))
       .sort((a, b) => g === "trial" ? a.daysLeft - b.daysLeft || b.created - a.created : b.created - a.created);
     html += ds.map(devCard).join("");
   });
@@ -248,10 +253,10 @@ function deviceSheet(d) {
     <div class="ids" style="margin-bottom:14px"><div class="idb" data-c="${esc(d.id)}"><small>DEVICE</small><div class="mono">${fmtId(d.id)}</div></div>
       <div class="idb" data-c="${esc(d.activation ? d.activation.activationId : "")}"><small>VERIFICATION</small><div class="mono">${d.activation ? shortAct(d.activation.activationId) : "—"}</div></div></div>
     <div class="sec">
-      <button class="btn" data-a="code">إصدار كود تفعيل</button>
-      <div id="res"></div>
+      ${d.group === "paid" ? '<div class="done">✓ تم التفعيل</div><button class="btn ghost" data-a="deact">إلغاء التفعيل</button>' : '<button class="btn" data-a="code">إصدار كود تفعيل</button><div id="res"></div>'}
     </div>
-    <div class="sec">${d.group === "blocked" ? '<button class="btn ghost" data-a="unblock">إلغاء الحظر</button>' : '<button class="btn red" data-a="block">حظر</button>'}</div>`);
+    <div class="sec">${d.group === "blocked" ? '<button class="btn ghost" data-a="unblock">فك الحظر</button>' : '<button class="btn red" data-a="block">حظر</button>'}</div>
+    <div class="sec"><button class="btn ghost" data-a="hide">إزالة من القائمة</button></div>`);
 }
 function codeSheet() {
   openSheet("كود لأي جهاز", `<div class="sec" style="border-top:0">
@@ -303,12 +308,19 @@ $("#sheet").addEventListener("click", e => {
   }
   if (a === "block") p = { deviceId: sel, blocked: true };
   if (a === "unblock") p = { deviceId: sel, blocked: false };
+  if (a === "deact") p = { deviceId: sel, permanent: false };
+  if (a === "hide") {
+    // Local only: removes the device from this phone's list; nothing changes on the server.
+    if (!b.dataset.ok) { b.dataset.ok = "1"; b.textContent = "تأكيد الإزالة"; return; }
+    const h = hidden(); h.push(sel); store.set("mth", JSON.stringify(h)); toast("تمت الإزالة"); closeSheet(); render(); return;
+  }
+  const DONE = { block: "تم الحظر", unblock: "تم فك الحظر", deact: "تم إلغاء التفعيل" };
   if (a === "deftrial") {
     const n = num("dt"); if (n < 0 || n > 365) return toast("مدة غير صالحة");
     busy(b, true);
     return api("set_default_trial", { days: n }).then(() => { toast("تم الحفظ"); closeSheet(); load(); }, fail).then(() => busy(b, false));
   }
-  if (p) { busy(b, true); api("update_device", p).then(() => { toast("تم"); closeSheet(); load(); }, fail).then(() => busy(b, false)); }
+  if (p) { busy(b, true); api("update_device", p).then(() => { toast(DONE[a] || "تم"); closeSheet(); load(); }, fail).then(() => busy(b, false)); }
 });
 
 $("#list").addEventListener("click", e => {
