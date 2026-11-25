@@ -16,68 +16,85 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;600;700&family=Noto+Kufi+Arabic:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f3f1ec;--card:#fff;--ink:#15171a;--mute:#6b6f76;--line:#e4e1da;--soft:#ebe8e1;--gold:#e0a93b;--gold-d:#a8741a;
---trial:#c98a12;--trial-bg:#fbf1dc;--paid:#0f8a5f;--paid-bg:#dff3ea;--exp:#7c828b;--exp-bg:#eceef1;--blk:#c2412d;--blk-bg:#f8e3df;
---sh:0 1px 2px rgba(20,20,20,.05),0 6px 18px rgba(20,20,20,.05)}
-:root.dark{--bg:#0f1114;--card:#171a1f;--ink:#f1eee8;--mute:#9aa0a8;--line:#262a31;--soft:#1f2329;
---trial-bg:#2d2413;--paid-bg:#0f2a20;--exp-bg:#22262c;--blk-bg:#33191486;--sh:0 1px 2px rgba(0,0,0,.4)}
+:root{--bg:#f4f2ee;--card:#fff;--ink:#14161a;--mute:#6d727a;--faint:#a3a7ad;--line:#e6e3dd;--soft:#ece9e3;--gold:#d39a2c;--gold-d:#a8741a;
+--trial:#b7790c;--trial-bg:#fbf0d9;--paid:#0d7f57;--paid-bg:#e2f3eb;--exp:#767c85;--exp-bg:#eceef1;--blk:#c2412d;--blk-bg:#f8e3df;
+--sh:0 1px 0 rgba(20,20,20,.03)}
+:root.dark{--bg:#0e1013;--card:#16191e;--ink:#f2efe9;--mute:#949aa3;--faint:#5f656e;--line:#23272e;--soft:#1d2127;
+--trial:#e0a43a;--trial-bg:#2a2112;--paid:#2bb583;--paid-bg:#10271e;--exp-bg:#20242a;--blk:#e2604b;--blk-bg:#2e1714;--sh:none}
 *{box-sizing:border-box;min-width:0;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font:15px/1.5 "Noto Kufi Arabic",system-ui,sans-serif;overflow:hidden}
 button,input{font:inherit;color:inherit}
 .lat{font-family:Montserrat,system-ui,sans-serif}
-.mono{font-family:"SFMono-Regular",ui-monospace,Menlo,Consolas,monospace;letter-spacing:.02em}
-.app{display:grid;grid-template-rows:auto auto auto 1fr;height:100%;max-width:720px;margin:0 auto}
-.top{display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top,0px) + 14px) 16px 10px}
+.mono{font-family:Montserrat,system-ui,sans-serif;font-variant-numeric:tabular-nums;letter-spacing:.03em}
+.num{font-family:Montserrat,system-ui,sans-serif;font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+.app{display:grid;grid-template-rows:auto 1fr;height:100%;max-width:820px;margin:0 auto}
+.top{display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top,0px) + 14px) 16px 12px}
 .mk{display:flex;direction:ltr;align-items:center;gap:1px;font:700 20px/1 Montserrat,sans-serif;letter-spacing:.02em}
 .mk svg{width:20px;height:20px;color:var(--gold);margin:0 1px}
-.brand{display:flex;flex-direction:column;align-items:flex-start;gap:2px;flex:1}
+.brand{display:flex;flex-direction:column;align-items:flex-start;gap:3px;flex:1}
 .brand small{font:500 9px/1 Montserrat,sans-serif;letter-spacing:.38em;color:var(--mute)}
 .ib{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer}
 .ib svg{width:19px;height:19px}
-.bar{display:flex;gap:8px;padding:0 16px 10px}
-.seg{display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--soft);border-radius:12px;padding:3px;flex:none;width:240px}
-.seg button{border:0;background:none;border-radius:9px;height:38px;font-size:13px;font-weight:500;color:var(--mute);cursor:pointer}
-.seg button.on{background:var(--card);color:var(--ink);box-shadow:var(--sh)}
-.search{flex:1;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);padding:0 12px;font-size:16px;outline:none;direction:ltr;text-align:right}
+.sw{position:relative}
+.sw svg{position:absolute;right:13px;top:50%;width:17px;height:17px;transform:translateY(-50%);color:var(--faint);pointer-events:none}
+.search{width:100%;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--card);padding:0 40px 0 12px;font-size:15px;outline:none}
+.search::placeholder{color:var(--faint);font-family:"Noto Kufi Arabic",sans-serif;font-size:13px}
 .search:focus{border-color:var(--gold)}
-.list{overflow-y:auto;padding:0 16px calc(env(safe-area-inset-bottom,0px) + 90px);overscroll-behavior:contain}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:var(--sh);cursor:pointer}
-.row{display:flex;align-items:center;gap:8px}
-.nm{font-weight:700;font-size:14px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pill{font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap}
-.g-trial .pill{color:var(--trial);background:var(--trial-bg)}.g-paid .pill{color:var(--paid);background:var(--paid-bg)}
-.g-expired .pill{color:var(--exp);background:var(--exp-bg)}.g-blocked .pill{color:var(--blk);background:var(--blk-bg)}
-.new{font:700 9px/1 Montserrat,sans-serif;letter-spacing:.14em;color:#fff;background:var(--gold-d);padding:4px 6px;border-radius:6px}
-.ids{display:grid;gap:6px;margin-top:12px}
-.idb{display:flex;align-items:center;gap:10px;border:1px dashed var(--line);border-radius:10px;padding:8px 10px;direction:ltr;cursor:copy}
-.idb small{flex:none;width:92px;font:500 9px/1.2 Montserrat,sans-serif;letter-spacing:.16em;color:var(--mute)}
-.idb div{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.vip{font:700 10px/1 Montserrat,sans-serif;letter-spacing:.12em}
-.meta{display:flex;justify-content:space-between;font-size:11px;color:var(--mute);margin-top:8px}
-.empty{text-align:center;color:var(--mute);padding:48px 0;font-size:13px}
-.sk{height:132px;border-radius:16px;background:linear-gradient(90deg,var(--soft),var(--card),var(--soft));background-size:200% 100%;animation:sk 1.2s infinite linear;margin-bottom:10px}
+.list{overflow-y:auto;padding:2px 2px calc(env(safe-area-inset-bottom,0px) + 40px);overscroll-behavior:contain}
+.grp{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--sh)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:var(--sh)}
+.it{display:flex;align-items:center;gap:12px;padding:13px 14px;cursor:pointer;position:relative}
+.it+.it{border-top:1px solid var(--line)}
+.it:active{background:var(--soft)}
+.av{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:none;font:700 15px/1 "Noto Kufi Arabic",sans-serif}
+.av svg{width:19px;height:19px}
+.g-paid .av{background:var(--paid-bg);color:var(--paid)}.g-trial .av{background:var(--trial-bg);color:var(--trial)}
+.g-expired .av{background:var(--exp-bg);color:var(--exp)}.g-blocked .av{background:var(--blk-bg);color:var(--blk)}
+.tx{flex:1;display:grid;gap:2px}
+.t1{font:600 16px/1.3 Montserrat,sans-serif;font-variant-numeric:tabular-nums;letter-spacing:.02em;direction:ltr;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.t1.ar{font:700 15px/1.4 "Noto Kufi Arabic",sans-serif;direction:rtl;letter-spacing:0}
+.t1.none{color:var(--mute);font:500 14px/1.4 "Noto Kufi Arabic",sans-serif;direction:rtl;letter-spacing:0}
+.t2{font-size:12px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.st{flex:none;font-size:12px;font-weight:700;text-align:left}
+.g-trial .st{color:var(--trial)}.g-expired .st{color:var(--exp)}.g-blocked .st{color:var(--blk)}
+.vip{display:inline-flex;align-items:center;gap:4px;font:700 11px/1 Montserrat,sans-serif;letter-spacing:.1em;color:#fff;background:var(--paid);padding:6px 9px;border-radius:8px}
+.vip svg{width:12px;height:12px}
+.empty{text-align:center;color:var(--mute);padding:56px 0;font-size:13px}
+.sk{height:72px;border-radius:16px;background:linear-gradient(90deg,var(--soft),var(--card),var(--soft));background-size:200% 100%;animation:sk 1.2s infinite linear;margin-bottom:10px}
 @keyframes sk{to{background-position:-200% 0}}
-.code-st{font-size:11px;font-weight:700}
+.code-st{font-size:12px;font-weight:700}
 .st-UNUSED{color:var(--trial)}.st-REDEEMED{color:var(--paid)}.st-REVOKED{color:var(--exp)}
-.fab{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 18px);height:52px;padding:0 26px;border-radius:999px;border:0;background:var(--ink);color:var(--bg);font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.18);cursor:pointer;display:none}
-.fab.show{display:block}
 .btn{height:48px;border-radius:12px;border:0;background:var(--ink);color:var(--bg);font-weight:700;padding:0 18px;cursor:pointer;white-space:nowrap}
 .btn.ghost{background:var(--soft);color:var(--ink)}
-.btn.red{background:var(--blk);color:#fff}
+.btn.red{background:none;color:var(--blk);border:1px solid var(--blk)}
 .btn:disabled{opacity:.5}
-.in{height:48px;border-radius:12px;border:1px solid var(--line);background:var(--bg);padding:0 12px;font-size:16px;outline:none;width:100%;text-align:center}
+.in{height:48px;border-radius:12px;border:1px solid var(--line);background:var(--card);padding:0 12px;font-size:16px;outline:none;width:100%;text-align:center}
 .in:focus{border-color:var(--gold)}
-.sheet{position:fixed;inset:0;max-width:720px;margin:0 auto;overflow-y:auto;background:var(--bg);padding:calc(env(safe-area-inset-top,0px) + 14px) 18px calc(env(safe-area-inset-bottom,0px) + 22px);transform:translateX(-105%);transition:transform .25s cubic-bezier(.2,.8,.2,1);z-index:20}
-.ph{display:flex;align-items:center;gap:10px;margin-bottom:16px}
-.ph .nm{font-size:16px}
+.sheet{position:fixed;inset:0;max-width:720px;margin:0 auto;overflow-y:auto;background:var(--bg);padding:calc(env(safe-area-inset-top,0px) + 14px) 16px calc(env(safe-area-inset-bottom,0px) + 22px);transform:translateX(-105%);transition:transform .25s cubic-bezier(.2,.8,.2,1);z-index:20}
+.ph{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.ph .nm{font-weight:700;font-size:15px;flex:1}
 .sheet.on{transform:none}
-.sec{border-top:1px solid var(--line);padding:14px 0;display:grid;gap:10px}
+.hero{display:grid;justify-items:center;gap:6px;padding:18px 0 22px;text-align:center}
+.hero .av{width:64px;height:64px;border-radius:20px}.hero .av svg{width:28px;height:28px}
+.hero .t1{font-size:24px;text-align:center}.hero .t1.ar,.hero .t1.none{font-size:18px}
+.hero .t2{font-size:13px}
+.hero .bdg{margin-top:4px;font-size:13px;font-weight:700;padding:6px 14px;border-radius:999px}
+.g-paid .bdg{background:var(--paid);color:#fff}.g-trial .bdg{background:var(--trial-bg);color:var(--trial)}
+.g-expired .bdg{background:var(--exp-bg);color:var(--exp)}.g-blocked .bdg{background:var(--blk-bg);color:var(--blk)}
+.kv{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:14px}
+.kv>div{display:flex;align-items:center;gap:12px;padding:13px 14px;font-size:13px}
+.kv>div+div{border-top:1px solid var(--line)}
+.kv span{color:var(--mute);flex:none}
+.kv b{flex:1;text-align:left;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kv [data-c]{cursor:copy}
+.kv .cp{flex:none;width:16px;height:16px;color:var(--faint)}
+.sec{display:grid;gap:10px;margin-bottom:12px}
 .sec h4{margin:0;font-size:13px;color:var(--mute);font-weight:500}
 .pair{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
 .out{border:1px solid var(--gold);background:var(--trial-bg);border-radius:14px;padding:14px;text-align:center;direction:ltr;cursor:copy}
 .out b{display:block;font-size:20px;letter-spacing:.06em}
 .out small{font-size:11px;color:var(--mute)}
-.toast{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);left:50%;transform:translate(-50%,-140%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:13px;transition:transform .2s;z-index:9;white-space:nowrap}
+.toast{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);left:50%;transform:translate(-50%,-140%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:13px;transition:transform .2s;z-index:30;white-space:nowrap}
 .toast.on{transform:translate(-50%,0)}
 .login{position:fixed;inset:0;background:var(--bg);display:grid;place-items:center;padding:24px;z-index:5}
 .login .box{width:100%;max-width:340px;display:grid;gap:14px;text-align:center}
@@ -85,16 +102,67 @@ button,input{font:inherit;color:inherit}
 .login .mk svg{width:44px;height:44px}
 .login small{font:300 11px/1 Montserrat,sans-serif;letter-spacing:.5em;color:var(--mute);margin-bottom:22px}
 .hide{display:none!important}
-.card.act{border-color:var(--paid)}
-.card.act .pill{background:var(--paid);color:#fff}.card.act .pill .vip{color:#fff}
-.done{display:flex;align-items:center;justify-content:center;gap:8px;height:52px;border-radius:12px;background:var(--paid);color:#fff;font-weight:700;font-size:16px}
-.rq{cursor:default}.rq .nm{font-weight:700;font-size:16px}
-.rq .ph{display:flex;gap:8px;margin-top:8px}.rq .ph a{flex:1;display:flex;align-items:center;justify-content:center;height:38px;border-radius:10px;background:var(--soft);color:var(--ink);text-decoration:none;font-size:13px;font-weight:600}
-.rq .acts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.rq .acts .btn{height:44px;font-size:14px}
-.rq .acts .life{background:var(--paid);color:#fff}.rq .acts .rej{grid-column:1/-1;height:36px;background:none;color:var(--blk);font-weight:600}
-.rq-st{font-size:12px;font-weight:700}.rq-APPROVED{color:var(--paid)}.rq-REJECTED,.rq-REVOKED{color:var(--blk)}
+.done{display:flex;align-items:center;justify-content:center;gap:8px;height:52px;border-radius:12px;background:var(--paid-bg);color:var(--paid);font-weight:700;font-size:15px}
+.rq{padding:0;overflow:hidden}
+.rq .rh{display:flex;align-items:center;gap:12px;padding:14px}
+.rq .rh .t1{font-size:19px}
+.rq .lbl{flex:none;font-size:11px;font-weight:700;padding:5px 10px;border-radius:999px;background:var(--trial-bg);color:var(--trial);display:inline-flex;align-items:center;gap:6px}
+.rq .lbl i{width:6px;height:6px;border-radius:50%;background:currentColor;animation:pl 1.6s infinite}
+@keyframes pl{50%{opacity:.25}}
+.rq .ph2{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
+.rq .ph2 a{display:flex;align-items:center;justify-content:center;gap:8px;height:44px;color:var(--ink);text-decoration:none;font-size:13px;font-weight:600}
+.rq .ph2 a+a{border-inline-start:1px solid var(--line)}
+.rq .ph2 svg{width:16px;height:16px;color:var(--mute)}
+.rq .acts{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 14px 6px;border-top:1px solid var(--line)}
+.rq .acts .btn{height:46px;font-size:14px}
+.rq .acts .life{background:var(--paid);color:#fff}
+.rq .acts .rej{grid-column:1/-1;height:38px;background:none;color:var(--blk);font-weight:600}
 .rq .acts .btn.sure{background:var(--blk);color:#fff}
-.badge{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--blk);color:#fff;font:700 11px/1 Montserrat,sans-serif;margin-inline-start:4px}
+.badge{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--blk);color:#fff;font:700 11px/1 Montserrat,sans-serif}
+.t3{font-size:13px;font-weight:700}
+.body{display:grid;grid-template-columns:70px minmax(0,1fr);gap:8px;padding:0 10px 0 12px;min-height:0}
+.nav{display:flex;flex-direction:column;gap:6px;padding-top:2px}
+.nv{position:relative;border:1px solid transparent;background:none;border-radius:14px;padding:10px 2px 8px;display:grid;justify-items:center;gap:5px;cursor:pointer;color:var(--mute)}
+.nv .ni{position:relative;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--soft)}
+.nv .ni svg{width:19px;height:19px}
+.nv .ni .badge{position:absolute;top:-6px;left:-7px;border:2px solid var(--bg);height:22px;min-width:22px;border-radius:11px}
+.nv .nl{font-size:10.5px;font-weight:700;line-height:1.35;text-align:center}
+.nv small{font:600 11px/1 Montserrat,sans-serif;color:var(--faint)}
+.nv.on{background:var(--card);border-color:var(--line);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.nv.on::after{content:"";position:absolute;right:-1px;top:14px;bottom:14px;width:3px;border-radius:3px 0 0 3px;background:var(--ink)}
+.nv.n-req .ni{color:var(--blk)}.nv.n-trial .ni{color:var(--trial)}.nv.n-vip .ni{color:var(--paid)}.nv.n-blk .ni{color:var(--exp)}
+.nv.on.n-req .ni{background:var(--blk-bg)}.nv.on.n-trial .ni{background:var(--trial-bg)}.nv.on.n-vip .ni{background:var(--paid-bg)}.nv.on.n-blk .ni{background:var(--exp-bg)}
+.nv.on.n-req::after{background:var(--blk)}.nv.on.n-trial::after{background:var(--trial)}.nv.on.n-vip::after{background:var(--paid)}.nv.on.n-blk::after{background:var(--exp)}
+.main{display:grid;grid-template-rows:auto auto 1fr;gap:10px;min-height:0}
+.ttl{margin:4px 2px 0;font-size:17px;font-weight:800;display:flex;align-items:center;gap:8px}
+.ttl b{font:600 13px/1 Montserrat,sans-serif;color:var(--faint)}
+.it{padding:12px 12px 12px 10px;gap:10px;align-items:flex-start}
+.it .av{width:34px;height:34px;border-radius:10px}.it .av svg{width:17px;height:17px}
+.it .t1{font-size:16px;text-align:right}
+.it .st{display:flex;align-items:center;gap:8px;margin-top:4px;font-size:12px;font-weight:700;text-align:right}
+.it .st .ok{color:var(--paid)}.it .st .red{color:var(--blk)}
+.t2.red{color:var(--blk);font-weight:600}
+.rq .rh{padding:14px 14px 12px}
+.rq .sd{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}.rq .sd small{font-size:11px;color:var(--faint)}
+.rq .rh .t1{font-size:20px;text-align:right}
+.rq .acts{grid-template-columns:1fr}
+.btn.life{background:var(--paid);color:#fff}
+.btn.sure{background:var(--blk)!important;color:#fff!important;border-color:var(--blk)!important}
+.sh{margin:18px 4px 8px;font-size:12px;color:var(--mute);font-weight:700}
+.kv .go{cursor:pointer}.kv .go span{color:var(--ink);font-weight:600;flex:1}.kv .go b{display:none}
+.kv .go .cp{width:18px;height:18px}
+.tg{flex:none;width:44px;height:26px;border-radius:13px;background:var(--soft);border:1px solid var(--line);position:relative;transition:.2s}
+.tg::after{content:"";position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:50%;background:var(--card);box-shadow:0 1px 2px rgba(0,0,0,.25);transition:.2s}
+.tg.on{background:var(--paid);border-color:var(--paid)}.tg.on::after{right:20px}
+.cc{cursor:default}.ccr{display:flex;align-items:center;justify-content:space-between;gap:8px}.ccr.t2{margin-top:6px}
+.sheet .empty{padding:30px 0}
+.it .st .soft{color:var(--mute);font-weight:600}
+.it.end .av,.hero.g-expired .av{background:var(--exp-bg);color:var(--exp)}
+.it.pick{background:var(--paid-bg)}.it.pick::after{content:"✓";position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--paid);font-weight:800}
+.dres{margin-top:10px}.dres .empty{padding:20px 0}
+.note{font-size:12px;color:var(--mute);margin:12px 4px;line-height:1.7}
+.nv.n-end .ni{color:var(--exp)}.nv.on.n-end .ni{background:var(--exp-bg)}.nv.on.n-end::after{background:var(--exp)}
+.nv.n-days .ni{color:var(--ink)}.nv.on.n-days::after{background:var(--ink)}
 .lab{font:600 11px/1 Montserrat,sans-serif;letter-spacing:.16em;color:var(--mute);text-align:left;direction:ltr;margin:4px 2px -8px}
 </style>
 </head>
@@ -120,13 +188,15 @@ button,input{font:inherit;color:inherit}
     <button class="ib" id="theme" aria-label="الوضع"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5Z"/></svg></button>
     <button class="ib" id="gear" aria-label="الإعدادات"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></button>
   </header>
-  <div class="bar">
-    <div class="seg"><button data-t="req">الطلبات<span class="badge hide" id="rqn"></span></button><button class="on" data-t="dev">الأجهزة</button><button data-t="codes">الأكواد</button></div>
-    <input class="search mono" id="q" placeholder="ID" inputmode="search" autocomplete="off">
+  <div class="body">
+    <nav class="nav" id="nav"></nav>
+    <section class="main">
+      <h2 class="ttl" id="ttl"></h2>
+      <div class="sw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search num" id="q" placeholder="ابحث برقم التلفون أو الاسم" inputmode="search" autocomplete="off"></div>
+      <main class="list" id="list"><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div></main>
+    </section>
   </div>
-  <main class="list" id="list"><div class="sk"></div><div class="sk"></div><div class="sk"></div></main>
 </div>
-<button class="fab" id="fab">إصدار كود</button>
 
 <div class="sheet" id="sheet"></div>
 <div class="toast" id="toast"></div>
@@ -137,8 +207,7 @@ const $ = s => document.querySelector(s);
 const esc = v => String(v == null ? "" : v).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const store = { get(k){ try { return localStorage.getItem(k); } catch(e) { return null; } }, set(k,v){ try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k,v); } catch(e) {} } };
 const ERR = { REQUEST_NOT_APPROVED:"الطلب مش مفعّل", REQUEST_ALREADY_DECIDED:"الطلب انحسم من قبل", REQUEST_NOT_FOUND:"الطلب مش موجود", ADMIN_UNAUTHORIZED:"ADMIN_KEY غلط", UNAUTHORIZED:"API_TOKEN غلط", SERVER_BUSY:"الخادم مشغول، أعد المحاولة", INVALID_CODE_DURATION:"مدة غير صالحة", INVALID_TRIAL_DAYS:"مدة غير صالحة", INVALID_EXTENSION_DAYS:"مدة غير صالحة", DEVICE_NOT_FOUND:"الجهاز غير موجود", CODE_ALREADY_REDEEMED:"الكود مستخدم", INVALID_DEVICE_ID:"رقم جهاز غير صالح" };
-const GL = { trial:"تجربة", paid:"VIP", expired:"منتهي", blocked:"محظور" };
-let key = store.get("mtk"), data = null, tab = "dev", sel = null;
+let key = store.get("mtk"), data = null, tab = "trial", sel = null;
 
 if (store.get("mtt") === "dark") document.documentElement.classList.add("dark");
 $("#theme").onclick = () => { const d = document.documentElement.classList.toggle("dark"); store.set("mtt", d ? "dark" : "light"); };
@@ -200,76 +269,133 @@ const shortAct = a => a ? "ACT · " + esc(a.replace(/^ACT_/, "").slice(-8)) : ""
 const dt = ms => ms ? "<bdi>" + new Date(ms).toLocaleDateString("en-GB", { day:"2-digit", month:"short" }) + "</bdi>" : "—";
 const left = d => d.group === "paid" ? (d.permanent ? "دائم" : (d.daysLeft === 1 ? "يوم" : d.daysLeft === 2 ? "يومين" : d.daysLeft + " يوم"))
   : d.group === "trial" ? (d.daysLeft <= 1 ? "باقي يوم" : d.daysLeft === 2 ? "باقي يومين" : "باقي " + d.daysLeft + " أيام") : "";
-const pill = d => d.group === "paid" ? '<bdi class="vip">VIP</bdi> · ' + (d.permanent ? "تم التفعيل ✓" : "باقي " + left(d)) : esc(d.group === "trial" ? left(d) : GL[d.group]);
+const SV = (d, w) => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="' + (w || 2) + '" stroke-linecap="round" stroke-linejoin="round">' + d + '</svg>';
+const AV = { paid: SV('<path d="M5 12.5l4.5 4.5L19 7.5"/>', 2.4), trial: SV('<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>'),
+  expired: SV('<path d="M7 4h10M7 20h10M8 4c0 4 8 5 8 8s-8 4-8 8M16 4c0 4-8 5-8 8"/>'), blocked: SV('<circle cx="12" cy="12" r="8.5"/><path d="M6 18 18 6"/>'),
+  user: SV('<circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5"/>') };
+const IC = { call: SV('<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>'),
+  wa: SV('<path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/>'), copy: SV('<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/>') };
+const VIP = '<span class="vip">' + SV('<path d="M5 12.5l4.5 4.5L19 7.5"/>', 3) + 'VIP</span>';
+// Phone as the captain types it, shown the local Jordanian way: 079 729 6245
+const localPhone = p => { let d = String(p || "").replace(/\D/g, ""); if (d.indexOf("00962") === 0) d = d.slice(2); if (d.indexOf("962") === 0) d = "0" + d.slice(3);
+  if (d.length === 9 && d[0] === "7") d = "0" + d; return d.length === 10 ? d.slice(0, 3) + " " + d.slice(3, 6) + " " + d.slice(6) : String(p || ""); };
+// Name and phone come from the captain's own activation request (if he sent one).
+function who(id) { const rs = ((data && data.requests) || []).filter(r => r.deviceId === id && r.phone); return rs.sort((a, b) => b.at - a.at)[0] || null; }
+const t1 = w => w ? `<div class="t1">${esc(localPhone(w.phone))}</div>` : '<div class="t1 none">بدون رقم تلفون</div>';
+const sub = (d, w) => [w && w.name, d.model || "جهاز أندرويد"].filter(Boolean).join(" · ");
+const stTxt = d => d.group === "trial" ? left(d) : d.group === "expired" ? "منتهي" : d.group === "blocked" ? "محظور" : "";
+const bdg = d => d.group === "paid" ? (d.permanent ? "VIP · مفعّل" : "مفعّل · باقي " + left(d)) : d.group === "trial" ? "تجربة · " + left(d) : d.group === "expired" ? "منتهي · بانتظار طلب تفعيل" : "محظور";
+const kv = (k, v, c, ar) => `<div${c ? ` data-c="${esc(c)}"` : ""}><span>${k}</span><b${ar ? "" : ' class="num"'}>${v}</b>${c ? '<i class="cp">' + IC.copy + "</i>" : ""}</div>`;
 
 function hidden() { try { return JSON.parse(store.get("mth") || "[]"); } catch(e) { return []; } }
+// Which list a device belongs to: free trial running, trial ended, VIP, blocked.
+const sect = d => d.group === "blocked" ? "blk" : (d.group === "paid" && d.permanent) ? "vip" : d.group === "expired" ? "end" : "trial";
+const ended = d => d.group === "expired";
 function devCard(d) {
-  const isNew = data.now - d.created < 86400000;
-  return `<div class="card g-${d.group}${d.permanent && d.group === "paid" ? " act" : ""}" data-id="${esc(d.id)}">
-    <div class="row"><div class="nm"><bdi>${esc(d.model || d.name || "Android")}</bdi></div>${isNew ? '<span class="new">NEW</span>' : ""}<span class="pill">${pill(d)}</span></div>
-    <div class="meta"><span class="mono" dir="ltr">…${esc(d.id.replace(/-/g, "").slice(-4))}</span><span><bdi>${d.app ? "v" + esc(d.app) : ""}</bdi></span></div>
-  </div>`;
+  const w = who(d.id), s = sect(d);
+  const st = s === "vip" ? VIP : ended(d) ? '<span class="soft">بانتظار طلب تفعيل</span>'
+    : d.group === "paid" ? `<span class="ok">مفعّل · باقي ${esc(left(d))}</span>` : `<span>${esc(stTxt(d))}</span>`;
+  return `<div class="it g-${d.group}${ended(d) ? " end" : ""}" data-id="${esc(d.id)}"><div class="av">${AV[d.group]}</div>
+    <div class="tx">${t1(w)}<div class="t2">${esc(sub(d, w))}</div><div class="st">${st}</div></div></div>`;
 }
 function codeCard(c) {
-  return `<div class="card" style="cursor:default"><div class="row"><div class="nm mono" dir="ltr" style="text-align:right">${esc(c.codeId.replace(/^COD_/, "").slice(-10))}</div><span class="code-st st-${esc(c.status)}">${c.status === "UNUSED" ? "متاح" : c.status === "REDEEMED" ? "مستخدم" : "ملغى"}</span></div>
-    <div class="meta"><span class="mono">${c.deviceId ? fmtId(c.deviceId) : "لأي جهاز"}</span><span>${c.days ? c.days + " يوم" : "مؤبد"} · ${dt(c.created)}</span></div>
-    ${c.status === "UNUSED" ? `<div style="margin-top:10px"><button class="btn ghost" data-rv="${esc(c.codeId)}" style="height:40px;width:100%">إلغاء الكود</button></div>` : ""}</div>`;
+  const w = c.deviceId ? who(c.deviceId) : null;
+  return `<div class="card cc"><div class="ccr"><div class="t1" style="flex:1">${esc(c.codeId.replace(/^COD_/, "").slice(-10))}</div><span class="code-st st-${esc(c.status)}">${c.status === "UNUSED" ? "متاح" : c.status === "REDEEMED" ? "مستخدم" : "ملغى"}</span></div>
+    <div class="ccr t2"><span class="num">${c.deviceId ? (w ? esc(localPhone(w.phone)) : fmtId(c.deviceId)) : "لأي جهاز"}</span><span>${c.days ? c.days + " يوم" : "مؤبد"} · ${dt(c.created)}</span></div>
+    ${c.status === "UNUSED" ? `<button class="btn ghost" data-rv="${esc(c.codeId)}" style="height:40px;width:100%;margin-top:10px">إلغاء الكود</button>` : ""}</div>`;
 }
 const when = ms => ms ? "<bdi>" + new Date(ms).toLocaleString("en-GB", { day:"2-digit", month:"short", hour:"2-digit", minute:"2-digit" }) + "</bdi>" : "—";
 function reqCard(r) {
-  const tail = esc(r.deviceId.replace(/-/g, "").slice(-4));
-  const wa = "https://wa.me/" + esc(r.phone.replace(/^\+/, "").replace(/^0/, "962"));
-  const head = `<div class="row"><div class="nm"><bdi>${esc(r.name)}</bdi></div>${r.status === "PENDING" ? '<span class="new">NEW</span>' : `<span class="rq-st rq-${esc(r.status)}">${r.status === "APPROVED" ? (r.plan === "life" ? "مفعّل مدى الحياة ✓" : "مفعّل 3 أيام ✓") : r.status === "REVOKED" ? "انلغى التفعيل" : "مرفوض"}</span>`}</div>
-    <div class="meta"><span><bdi>${esc(r.model || "Android")}</bdi>${r.app ? " · v" + esc(r.app) : ""}</span><span>${when(r.at)}</span></div>
-    <div class="meta"><span class="mono" dir="ltr">${esc(r.phone)}</span><span class="mono" dir="ltr">…${tail}</span></div>`;
-  if (r.status === "APPROVED") return `<div class="card rq">${head}<div class="acts"><button class="btn rej" data-rk="${esc(r.id)}">إلغاء التفعيل</button></div></div>`;
-  if (r.status !== "PENDING") return `<div class="card rq">${head}</div>`;
-  return `<div class="card rq">${head}
-    <div class="ph"><a href="tel:${esc(r.phone)}">اتصال</a><a href="${wa}" target="_blank" rel="noopener">واتساب</a></div>
-    <div class="acts"><button class="btn" data-ap="3d" data-rq="${esc(r.id)}">فعّل 3 أيام</button><button class="btn life" data-ap="life" data-rq="${esc(r.id)}">فعّل مدى الحياة</button>
+  const wa = "https://wa.me/" + esc(String(r.phone).replace(/\D/g, "").replace(/^0/, "962"));
+  return `<div class="card rq"><div class="rh"><div class="tx"><div class="sd"><span class="lbl"><i></i>طلب جديد</span><small>${when(r.at)}</small></div>
+    <div class="t1">${esc(localPhone(r.phone))}</div><div class="t3">${esc(r.name)}</div><div class="t2">${esc(r.model || "جهاز أندرويد")}</div></div></div>
+    <div class="ph2"><a href="tel:${esc(r.phone)}">${IC.call}اتصال</a><a href="${wa}" target="_blank" rel="noopener">${IC.wa}واتساب</a></div>
+    <div class="acts"><button class="btn life" data-ap="life" data-rq="${esc(r.id)}">تفعيل VIP</button>
     <button class="btn rej" data-rj="${esc(r.id)}">رفض</button></div></div>`;
+}
+const NAV = [["req", "الطلبات", SV('<path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/>')], ["trial", "التجربة<br>المجانية", AV.trial],
+  ["end", "منتهي", AV.expired], ["vip", "VIP", SV('<path d="m4 8 4 3 4-6 4 6 4-3-2 10H6z"/>')], ["blk", "المحظورين", AV.blocked]]
+  .concat([["days", "الأيام", SV('<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4M12 13v4M10 15h4"/>')]]);
+const TITLE = { req: "طلبات التفعيل", trial: "التجربة المجانية", end: "منتهي · بانتظار طلب تفعيل", vip: "VIP", blk: "المحظورين", days: "الأيام" };
+const EMPTY = { req: "ما في طلبات جديدة", trial: "ما في كباتن بالتجربة", end: "ما في حدا خلصت تجربته", vip: "ما في كباتن VIP", blk: "ما في محظورين" };
+// Days: add free days to one captain or to everyone (same server call as before: trialDays per device).
+let dpick = null;
+function daysHtml() {
+  return `<h4 class="sh" style="margin-top:4px">لكابتن معيّن</h4>
+    <div class="sw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search num" id="dq" placeholder="ابحث برقم التلفون أو الاسم" inputmode="search" autocomplete="off"></div>
+    <div id="dres" class="dres"></div>
+    <div class="sec" style="margin-top:10px"><div class="pair"><input class="in lat" id="d1" inputmode="numeric" value="3"><button class="btn" data-a="dadd">زيادة الأيام</button></div></div>
+    <h4 class="sh">للكباتن كلهم</h4>
+    <div class="sec"><div class="pair"><input class="in lat" id="ea" inputmode="numeric" placeholder="عدد الأيام"><button class="btn ghost" data-a="extall">تمديد للكل</button></div></div>
+    <p class="note">الأيام بتنزاد على التجربة المجانية. اللي خلصت تجربته بيرجع على «التجربة المجانية».</p>`;
+}
+function daysList() {
+  const el = $("#dres"); if (!el || !data) return;
+  const q = ($("#dq").value || "").trim().toUpperCase().replace(/[\s-]/g, ""), digits = q.replace(/\D/g, "");
+  const ds = data.devices.filter(d => (d.group === "trial" || d.group === "expired") && d.created).filter(d => { if (!q) return true; const w = who(d.id);
+    return (w ? (w.name + w.phone).toUpperCase().replace(/\s/g, "").indexOf(q) >= 0 || (digits.length >= 3 && localPhone(w.phone).replace(/\D/g, "").indexOf(digits) >= 0) : false) || d.id.replace(/-/g, "").indexOf(q) >= 0; })
+    .sort((a, b) => (a.group === "expired" ? -1 : a.daysLeft) - (b.group === "expired" ? -1 : b.daysLeft)).slice(0, 6);
+  el.innerHTML = ds.length ? `<div class="grp">${ds.map(d => devCard(d).replace('class="it ', `data-a="dpick" class="it${dpick === d.id ? " pick" : ""} `)).join("")}</div>` : '<div class="empty">ما في كابتن بهالرقم</div>';
 }
 function render() {
   if (!data) return;
-  $("#fab").classList.toggle("show", tab === "codes");
-  document.querySelector('.seg button[data-t="codes"]').classList.toggle("hide", !!data.legacy);
-  const q = $("#q").value.trim().toUpperCase().replace(/[\s·-]/g, "");
+  const reqs = (data.requests || []).filter(r => r.status === "PENDING");
+  const q = $("#q").value.trim().toUpperCase().replace(/[\s·-]/g, ""), digits = q.replace(/\D/g, "");
+  const byPhone = p => digits.length >= 3 && localPhone(p).replace(/\D/g, "").indexOf(digits) >= 0;
+  const hid = hidden();
+  const devs = data.devices.filter(d => hid.indexOf(d.id) < 0);
+  const cnt = { req: reqs.length, trial: 0, end: 0, vip: 0, blk: 0 };
+  devs.forEach(d => cnt[sect(d)]++);
+  $("#nav").innerHTML = NAV.filter(n => !(n[0] === "req" && data.legacy)).map(n => `<button class="nv${tab === n[0] ? " on" : ""} n-${n[0]}" data-t="${n[0]}">
+    <span class="ni">${n[2]}${n[0] === "req" && cnt.req ? `<b class="badge">${cnt.req}</b>` : ""}</span><span class="nl">${n[1]}</span>${cnt[n[0]] !== undefined && n[0] !== "req" ? `<small>${cnt[n[0]]}</small>` : ""}</button>`).join("");
+  $("#ttl").innerHTML = `${TITLE[tab]}${tab === "days" ? "" : `<b>${cnt[tab]}</b>`}`;
+  $(".main .sw").classList.toggle("hide", tab === "days");
   const L = $("#list");
-  const reqs = data.requests || [];
-  const pend = reqs.filter(r => r.status === "PENDING").length;
-  $("#rqn").textContent = pend; $("#rqn").classList.toggle("hide", !pend);
-  document.querySelector('.seg button[data-t="req"]').classList.toggle("hide", !!data.legacy);
+  if (tab === "days") { if (!$("#dres")) { L.innerHTML = daysHtml(); daysList(); } return; }
   if (tab === "req") {
-    const rs = reqs.filter(r => !q || (r.name + r.phone + r.deviceId).toUpperCase().replace(/[\s-]/g, "").indexOf(q) >= 0);
-    L.innerHTML = rs.length ? rs.map(reqCard).join("") : '<div class="empty">ما في طلبات</div>';
+    const rs = reqs.filter(r => !q || (r.name + r.phone + r.deviceId).toUpperCase().replace(/[\s-]/g, "").indexOf(q) >= 0 || byPhone(r.phone)).sort((a, b) => b.at - a.at);
+    L.innerHTML = rs.length ? rs.map(reqCard).join("") : `<div class="empty">${EMPTY.req}</div>`;
     return;
   }
-  if (tab === "codes") {
-    const cs = data.codes.filter(c => !q || (c.codeId + c.deviceId).toUpperCase().replace(/-/g, "").indexOf(q) >= 0);
-    L.innerHTML = cs.length ? cs.map(codeCard).join("") : '<div class="empty">لا توجد أكواد</div>';
-    return;
+  const hit = d => { if (!q) return true; const w = who(d.id);
+    return (d.id.replace(/-/g, "") + (d.activation ? d.activation.activationId : "") + (w ? w.name + w.phone : "")).toUpperCase().replace(/\s/g, "").indexOf(q) >= 0 || (w && byPhone(w.phone)); };
+  // Trial: fewest days left first. Others: newest first.
+  const ds = devs.filter(d => sect(d) === tab && hit(d)).sort((a, b) => tab === "trial" ? a.daysLeft - b.daysLeft || b.created - a.created : b.created - a.created);
+  L.innerHTML = ds.length ? `<div class="grp">${ds.map(devCard).join("")}</div>` : `<div class="empty">${EMPTY[tab]}</div>`;
+}
+// New requests / new captains while the console is open: sound + phone notification (settings toggle).
+let seen = null;
+function chime() {
+  try { const C = window.AudioContext || window.webkitAudioContext; const c = new C(); [0, .16].forEach((t, i) => { const o = c.createOscillator(), g = c.createGain();
+    o.frequency.value = i ? 1175 : 880; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(.0001, c.currentTime + t);
+    g.gain.exponentialRampToValueAtTime(.25, c.currentTime + t + .02); g.gain.exponentialRampToValueAtTime(.0001, c.currentTime + t + .35); o.start(c.currentTime + t); o.stop(c.currentTime + t + .4); }); } catch(e) {}
+}
+function notifyNew(r) {
+  const ids = new Set([...(r.requests || []).filter(x => x.status === "PENDING").map(x => "r" + x.id), ...(r.devices || []).map(x => "d" + x.id)]);
+  if (seen) {
+    const nr = (r.requests || []).filter(x => x.status === "PENDING" && !seen.has("r" + x.id)).length;
+    const nd = (r.devices || []).filter(x => !seen.has("d" + x.id)).length;
+    const msg = nr ? (nr === 1 ? "طلب تفعيل جديد" : nr + " طلبات تفعيل جديدة") : nd ? (nd === 1 ? "كابتن جديد بالتجربة" : nd + " كباتن جدد بالتجربة") : "";
+    if (msg && store.get("mts") !== "off") {
+      chime();
+      try { if (window.Notification && Notification.permission === "granted") navigator.serviceWorker.ready.then(s => s.showNotification("M♡T Console", { body: msg, icon: "icon-192.png", tag: "mtc" })); } catch(e) {}
+    }
   }
-  const order = ["trial", "paid", "expired", "blocked"];
-  let html = "";
-  order.forEach(g => {
-    const hid = hidden();
-    const ds = data.devices.filter(d => d.group === g && hid.indexOf(d.id) < 0 && (!q || d.id.replace(/-/g, "").indexOf(q) >= 0 || (d.activation && d.activation.activationId.toUpperCase().indexOf(q) >= 0)))
-      .sort((a, b) => g === "trial" ? a.daysLeft - b.daysLeft || b.created - a.created : b.created - a.created);
-    html += ds.map(devCard).join("");
-  });
-  L.innerHTML = html || '<div class="empty">لا توجد أجهزة</div>';
+  seen = ids;
 }
 let autoReq = true;
 function load() {
   return api("overview").then(r => {
-    data = r;
+    data = r; notifyNew(r);
     if (autoReq && (r.requests || []).some(x => x.status === "PENDING")) { autoReq = false; return setTab("req"); }
-    autoReq = false; render();
+    if (autoReq) { autoReq = false; if (tab === "req" && r.legacy) tab = "trial"; }
+    render();
   }, fail);
 }
 
 // Full-page view with its own back button; the phone's back button closes it too.
 let sheetOpen = false;
+const CHEV = SV('<path d="M15 6l-6 6 6 6"/>');
 const BACK = '<button class="ib" data-back aria-label="رجوع"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>';
 function openSheet(title, html) {
   $("#sheet").innerHTML = `<div class="ph">${BACK}<div class="nm">${title}</div></div>` + html;
@@ -281,37 +407,71 @@ function hideSheet() { $("#sheet").classList.remove("on"); sheetOpen = false; se
 function closeSheet() { if (sheetOpen && history.state && history.state.sheet) history.back(); else hideSheet(); }
 window.addEventListener("popstate", () => { if (sheetOpen) hideSheet(); });
 
+const lastApproved = id => ((data && data.requests) || []).filter(r => r.deviceId === id && r.status === "APPROVED").sort((a, b) => b.at - a.at)[0];
 function deviceSheet(d) {
   sel = d.id;
-  openSheet(`<bdi>${esc(d.model || d.name || "Android")}</bdi>`, `
-    <div class="row g-${d.group}"><span class="pill">${pill(d)}</span></div>
-    <div class="ids" style="margin-bottom:14px"><div class="idb" data-c="${esc(d.id)}"><small>DEVICE</small><div class="mono">${fmtId(d.id)}</div></div>
-      <div class="idb" data-c="${esc(d.activation ? d.activation.activationId : "")}"><small>VERIFICATION</small><div class="mono">${d.activation ? shortAct(d.activation.activationId) : "—"}</div></div></div>
-    <div class="sec">
-      ${d.group === "paid" ? '<div class="done">✓ تم التفعيل</div><button class="btn ghost" data-a="deact">إلغاء التفعيل</button>' : '<button class="btn" data-a="code">إصدار كود تفعيل</button><div id="res"></div>'}
+  const w = who(d.id), s = sect(d);
+  const act = s === "vip" ? '<div class="done">✓ مفعّل VIP</div><button class="btn ghost" data-a="deact">إلغاء التفعيل</button>'
+    : s === "trial" || s === "end" ? '<button class="btn life" data-a="life">تفعيل VIP</button>' + (d.group === "paid" ? '<button class="btn ghost" data-a="deact">إلغاء التفعيل</button>' : "") : "";
+  openSheet(w && w.name ? esc(w.name) : "تفاصيل الجهاز", `
+    <div class="hero g-${d.group}"><div class="av">${AV[d.group]}</div>${t1(w)}<div class="t2">${esc(sub(d, w))}</div>
+      <div class="bdg">${esc(bdg(d))}</div></div>
+    <div class="kv">
+      ${w ? kv("رقم التلفون", esc(localPhone(w.phone)), w.phone) : ""}
+      ${w && w.name ? kv("الاسم", esc(w.name), "", true) : ""}
+      ${kv("نوع الجهاز", esc(d.model || "جهاز أندرويد"))}
+      ${d.app ? kv("نسخة التطبيق", "v" + esc(d.app)) : ""}
+      ${kv("رقم الجهاز", fmtId(d.id), d.id)}
+      ${d.activation ? kv("رقم التفعيل", shortAct(d.activation.activationId), d.activation.activationId) : ""}
     </div>
+    ${act ? `<div class="sec">${act}</div>` : ""}
     <div class="sec">${d.group === "blocked" ? '<button class="btn ghost" data-a="unblock">فك الحظر</button>' : '<button class="btn red" data-a="block">حظر</button>'}</div>
     <div class="sec"><button class="btn ghost" data-a="hide">إزالة من القائمة</button></div>`);
 }
-function codeSheet() {
-  openSheet("كود لأي جهاز", `<div class="sec" style="border-top:0">
-    <button class="btn" data-a="code">إصدار كود تفعيل</button><div id="res"></div></div>`);
+function codesSheet() {
+  sel = null;
+  openSheet("الأكواد", `<div class="sec"><button class="btn" data-a="code">إصدار كود لأي جهاز</button><div id="res"></div></div>
+    ${(data.codes || []).length ? data.codes.map(codeCard).join("") : '<div class="empty">لا توجد أكواد</div>'}`);
 }
 function settingsSheet() {
+  const snd = store.get("mts") !== "off";
   openSheet("الإعدادات", `
-    <div class="sec" style="border-top:0"><h4>مدة التجربة للأجهزة الجديدة</h4><div class="pair"><input class="in lat" id="dt" inputmode="numeric" value="${data ? data.defaultTrialDays : 3}"><button class="btn ghost" data-a="deftrial">حفظ</button></div></div>
-    <div class="sec"><div class="pair"><input class="in lat" id="ea" inputmode="numeric" placeholder="عدد الأيام"><button class="btn ghost" data-a="extall">تمديد للكل</button></div></div>
-    <div class="sec"><button class="btn ghost" data-a="logout">تسجيل الخروج</button></div>`);
+    <div class="kv${data && !data.legacy ? "" : " hide"}">${data && !data.legacy ? `<div data-a="codes" class="go"><span>الأكواد</span><b></b><i class="cp">${CHEV}</i></div>` : ""}</div>
+    <h4 class="sh">الإشعارات والأصوات</h4>
+    <div class="kv"><div data-a="snd" class="go"><span>صوت وإشعار لما يوصل طلب أو كابتن جديد</span><b></b><i class="tg${snd ? " on" : ""}"></i></div></div>
+    <h4 class="sh">مدة التجربة للأجهزة الجديدة</h4>
+    <div class="sec"><div class="pair"><input class="in lat" id="dt" inputmode="numeric" value="${data ? data.defaultTrialDays : 3}"><button class="btn ghost" data-a="deftrial">حفظ</button></div></div>
+    <div class="sec" style="margin-top:22px"><button class="btn ghost" data-a="logout">تسجيل الخروج</button></div>`);
 }
 function busy(btn, on) { if (btn) btn.disabled = on; }
 function num(id) { const n = parseInt(($("#" + id) || {}).value, 10); return isNaN(n) ? -1 : n; }
+// Lifetime, cancel and block ask for a second tap (no change by mistake).
+const sure = x => { if (x.dataset.ok) return true; if (!x.dataset.t) x.dataset.t = x.textContent; x.dataset.ok = "1"; x.classList.add("sure"); x.textContent = "متأكد؟ اكبس كمان مرة";
+  setTimeout(() => { if (x.isConnected && x.dataset.ok) { delete x.dataset.ok; x.classList.remove("sure"); x.textContent = x.dataset.t; } }, 5000); return false; };
 
-$("#sheet").addEventListener("click", e => {
+function onAct(e) {
   if (e.target.closest("[data-back]")) return closeSheet();
   const cp = e.target.closest("[data-c]"); if (cp) { if (cp.dataset.c) copy(cp.dataset.c); return; }
+  const rv = e.target.closest("[data-rv]");
+  if (rv) { rv.disabled = true; api("revoke_code", { codeId: rv.dataset.rv }).then(() => { toast("تم الإلغاء"); return load(); }, fail).then(() => { if (data) codesSheet(); }); return; }
   const b = e.target.closest("[data-a]"); if (!b) return;
   const a = b.dataset.a;
-  if (a === "logout") { store.set("mtk", null); store.set("mtk2", null); store.set("mtm", null); key = null; closeSheet(); $("#login").classList.remove("hide"); return; }
+  if (a === "codes") { history.replaceState({ sheet: 1 }, ""); return codesSheet(); }
+  if (a === "dpick") { dpick = b.dataset.id; return daysList(); }
+  if (a === "dadd") {
+    const n = num("d1"); if (n < 1 || n > 365) return toast("مدة غير صالحة");
+    const d = data && data.devices.find(x => x.id === dpick); if (!d) return toast("اختار الكابتن أول");
+    const now = Date.now(), D = 86400000, base = d.group === "trial" && d.end ? d.end : now;
+    busy(b, true);
+    return api("update_device", { deviceId: d.id, trialDays: Math.min(365, Math.ceil((base - d.created) / D) + n) })
+      .then(() => { toast("تمت زيادة " + n + " أيام"); dpick = null; return load(); }, fail).then(() => { busy(b, false); daysList(); });
+  }
+  if (a === "snd") {
+    const on = store.get("mts") === "off"; store.set("mts", on ? "on" : "off"); b.querySelector(".tg").classList.toggle("on", on);
+    if (on) { chime(); try { if (window.Notification && Notification.permission === "default") Notification.requestPermission(); } catch(e) {} }
+    return;
+  }
+  if (a === "logout") { store.set("mtk", null); store.set("mtk2", null); store.set("mtm", null); key = null; mode = "console"; tok = null; seen = null; $("#tok").value = ""; $("#tok").classList.add("hide"); $("#tokl").classList.add("hide"); closeSheet(); $("#login").classList.remove("hide"); return; }
   let p;
   if (a === "code") {
     // Every code is lifetime (days 0 = permanent on the server).
@@ -321,6 +481,22 @@ $("#sheet").addEventListener("click", e => {
       $("#res").innerHTML = `<div class="out" data-c="${esc(c.code)}"><b class="mono">${esc(c.code)}</b><small>مؤبد · انسخ</small></div>`;
       copy(c.code); load();
     }, fail).then(() => busy(b, false));
+  }
+  if (a === "life") {
+    if (!sure(b)) return;
+    // A pending request for this device is approved (so the captain sees it); otherwise the device is set lifetime directly.
+    const pr = ((data && data.requests) || []).find(r => r.deviceId === sel && r.status === "PENDING");
+    busy(b, true);
+    return (pr ? api("approve_request", { requestId: pr.id, plan: "life" }) : api("update_device", { deviceId: sel, permanent: true }))
+      .then(() => { toast("تم تفعيل VIP"); closeSheet(); load(); }, fail).then(() => busy(b, false));
+  }
+  if (a === "deact") {
+    if (!sure(b)) return;
+    // Activated from a request: cancel that request (the app shows it); otherwise remove lifetime.
+    const ar = lastApproved(sel);
+    busy(b, true);
+    return (ar ? api("revoke_request", { requestId: ar.id }) : api("update_device", { deviceId: sel, permanent: false }))
+      .then(() => { toast("تم إلغاء التفعيل"); closeSheet(); load(); }, fail).then(() => busy(b, false));
   }
   if (a === "extall") {
     const n = num("ea"); if (n < 1 || n > 365) return toast("مدة غير صالحة");
@@ -332,7 +508,7 @@ $("#sheet").addEventListener("click", e => {
     busy(b, true);
     let i = 0;
     const next = () => {
-      if (i >= list.length) { toast("تم تمديد " + list.length); closeSheet(); return load(); }
+      if (i >= list.length) { toast("تم تمديد " + list.length); if (sheetOpen) closeSheet(); return load(); }
       const d = list[i++];
       const base = d.group === "trial" && d.end ? d.end : now;
       const len = Math.min(365, Math.ceil((base - d.created) / D) + n);
@@ -341,53 +517,43 @@ $("#sheet").addEventListener("click", e => {
     };
     return next().catch(fail).then(() => busy(b, false));
   }
-  if (a === "block") p = { deviceId: sel, blocked: true };
+  if (a === "block") { if (!sure(b)) return; p = { deviceId: sel, blocked: true }; }
   if (a === "unblock") p = { deviceId: sel, blocked: false };
-  if (a === "deact") p = { deviceId: sel, permanent: false };
   if (a === "hide") {
     // Local only: removes the device from this phone's list; nothing changes on the server.
     if (!b.dataset.ok) { b.dataset.ok = "1"; b.textContent = "تأكيد الإزالة"; return; }
     const h = hidden(); h.push(sel); store.set("mth", JSON.stringify(h)); toast("تمت الإزالة"); closeSheet(); render(); return;
   }
-  const DONE = { block: "تم الحظر", unblock: "تم فك الحظر", deact: "تم إلغاء التفعيل" };
+  const DONE = { block: "تم الحظر", unblock: "تم فك الحظر" };
   if (a === "deftrial") {
     const n = num("dt"); if (n < 0 || n > 365) return toast("مدة غير صالحة");
     busy(b, true);
     return api("set_default_trial", { days: n }).then(() => { toast("تم الحفظ"); closeSheet(); load(); }, fail).then(() => busy(b, false));
   }
   if (p) { busy(b, true); api("update_device", p).then(() => { toast(DONE[a] || "تم"); closeSheet(); load(); }, fail).then(() => busy(b, false)); }
-});
+}
+$("#sheet").addEventListener("click", onAct);
+$("#sheet").addEventListener("input", e => { if (e.target.id === "dq") daysList(); });
 
+$("#list").addEventListener("input", e => { if (e.target.id === "dq") daysList(); });
 $("#list").addEventListener("click", e => {
-  const cp = e.target.closest("[data-c]"); if (cp) { if (cp.dataset.c) copy(cp.dataset.c); return; }
-  const ap = e.target.closest("[data-ap]"), rj = e.target.closest("[data-rj]"), rk = e.target.closest("[data-rk]");
-  // Lifetime and cancel ask for a second tap (no activation or cancel by mistake).
-  const sure = x => { if (x.dataset.ok) return true; x.dataset.ok = "1"; x.classList.add("sure"); x.textContent = "متأكد؟ اكبس كمان مرة"; setTimeout(() => { if (x.isConnected && x.dataset.ok) { delete x.dataset.ok; x.classList.remove("sure"); x.textContent = x.dataset.t; } }, 5000); return false; };
-  if (rk) {
-    if (!rk.dataset.t) rk.dataset.t = rk.textContent;
-    if (!sure(rk)) return;
-    rk.disabled = true;
-    api("revoke_request", { requestId: rk.dataset.rk }).then(() => { toast("انلغى التفعيل"); load(); }, e2 => { rk.disabled = false; fail(e2); });
-    return;
-  }
-  if (ap && ap.dataset.ap === "life") { if (!ap.dataset.t) ap.dataset.t = ap.textContent; if (!sure(ap)) return; }
+  if (e.target.closest("[data-a]")) return onAct(e);
+  const ap = e.target.closest("[data-ap]"), rj = e.target.closest("[data-rj]");
+  if (ap && ap.dataset.ap === "life" && !sure(ap)) return;
   if (ap || rj) {
     const b = ap || rj;
     b.closest(".acts").querySelectorAll("button").forEach(x => x.disabled = true);
     const op = ap ? api("approve_request", { requestId: ap.dataset.rq, plan: ap.dataset.ap }) : api("reject_request", { requestId: rj.dataset.rj });
-    op.then(() => { toast(ap ? (ap.dataset.ap === "life" ? "تم التفعيل مدى الحياة" : "تم التفعيل 3 أيام") : "تم الرفض"); load(); },
+    op.then(() => { toast(ap ? "تم تفعيل VIP" : "تم الرفض"); load(); },
       e => { b.closest(".acts").querySelectorAll("button").forEach(x => x.disabled = false); fail(e); });
     return;
   }
-  const rv = e.target.closest("[data-rv]");
-  if (rv) { rv.disabled = true; api("revoke_code", { codeId: rv.dataset.rv }).then(() => { toast("تم الإلغاء"); load(); }, fail); return; }
-  const c = e.target.closest(".card[data-id]");
-  if (c && data) { const d = data.devices.find(x => x.id === c.dataset.id); if (d) deviceSheet(d); }
+  const c = e.target.closest("[data-id]");
+  if (c && data && !c.dataset.a) { const d = data.devices.find(x => x.id === c.dataset.id); if (d) deviceSheet(d); }
 });
-function setTab(t) { tab = t; document.querySelectorAll(".seg button").forEach(b => b.classList.toggle("on", b.dataset.t === t)); render(); }
-document.querySelectorAll(".seg button").forEach(b => b.onclick = () => setTab(b.dataset.t));
+function setTab(t) { if (t === "days") { dpick = null; $("#list").innerHTML = ""; } tab = t; $("#list").scrollTop = 0; render(); }
+$("#nav").addEventListener("click", e => { const b = e.target.closest("[data-t]"); if (b) setTab(b.dataset.t); });
 $("#q").addEventListener("input", render);
-$("#fab").onclick = () => { sel = null; codeSheet(); };
 $("#gear").onclick = settingsSheet;
 
 function enter() {
@@ -397,8 +563,8 @@ function enter() {
   if (t) { mode = "legacy"; tok = t; }
   api("overview").then(r => {
     store.set("mtk", v); store.set("mtm", mode); if (mode === "legacy") store.set("mtk2", tok);
-    $("#login").classList.add("hide"); data = r;
-    if ((r.requests || []).some(x => x.status === "PENDING")) setTab("req"); else render();
+    $("#login").classList.add("hide"); data = r; notifyNew(r); autoReq = false;
+    setTab((r.requests || []).some(x => x.status === "PENDING") ? "req" : "trial");
   }, e => {
     const m = String(e && e.message);
     // Current server checks the API token before anything else, so the console route answers UNAUTHORIZED.
