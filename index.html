@@ -35,7 +35,7 @@ button,input{font:inherit;color:inherit}
 .ib{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer}
 .ib svg{width:19px;height:19px}
 .bar{display:flex;gap:8px;padding:0 16px 10px}
-.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--soft);border-radius:12px;padding:3px;flex:none;width:168px}
+.seg{display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--soft);border-radius:12px;padding:3px;flex:none;width:240px}
 .seg button{border:0;background:none;border-radius:9px;height:38px;font-size:13px;font-weight:500;color:var(--mute);cursor:pointer}
 .seg button.on{background:var(--card);color:var(--ink);box-shadow:var(--sh)}
 .search{flex:1;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);padding:0 12px;font-size:16px;outline:none;direction:ltr;text-align:right}
@@ -88,6 +88,12 @@ button,input{font:inherit;color:inherit}
 .card.act{border-color:var(--paid)}
 .card.act .pill{background:var(--paid);color:#fff}.card.act .pill .vip{color:#fff}
 .done{display:flex;align-items:center;justify-content:center;gap:8px;height:52px;border-radius:12px;background:var(--paid);color:#fff;font-weight:700;font-size:16px}
+.rq{cursor:default}.rq .nm{font-weight:700;font-size:16px}
+.rq .ph{display:flex;gap:8px;margin-top:8px}.rq .ph a{flex:1;display:flex;align-items:center;justify-content:center;height:38px;border-radius:10px;background:var(--soft);color:var(--ink);text-decoration:none;font-size:13px;font-weight:600}
+.rq .acts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.rq .acts .btn{height:44px;font-size:14px}
+.rq .acts .life{background:var(--paid);color:#fff}.rq .acts .rej{grid-column:1/-1;height:36px;background:none;color:var(--blk);font-weight:600}
+.rq-st{font-size:12px;font-weight:700}.rq-APPROVED{color:var(--paid)}.rq-REJECTED{color:var(--blk)}
+.badge{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--blk);color:#fff;font:700 11px/1 Montserrat,sans-serif;margin-inline-start:4px}
 .lab{font:600 11px/1 Montserrat,sans-serif;letter-spacing:.16em;color:var(--mute);text-align:left;direction:ltr;margin:4px 2px -8px}
 </style>
 </head>
@@ -114,7 +120,7 @@ button,input{font:inherit;color:inherit}
     <button class="ib" id="gear" aria-label="الإعدادات"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></button>
   </header>
   <div class="bar">
-    <div class="seg"><button class="on" data-t="dev">الأجهزة</button><button data-t="codes">الأكواد</button></div>
+    <div class="seg"><button data-t="req">الطلبات<span class="badge hide" id="rqn"></span></button><button class="on" data-t="dev">الأجهزة</button><button data-t="codes">الأكواد</button></div>
     <input class="search mono" id="q" placeholder="ID" inputmode="search" autocomplete="off">
   </div>
   <main class="list" id="list"><div class="sk"></div><div class="sk"></div><div class="sk"></div></main>
@@ -129,7 +135,7 @@ button,input{font:inherit;color:inherit}
 const $ = s => document.querySelector(s);
 const esc = v => String(v == null ? "" : v).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const store = { get(k){ try { return localStorage.getItem(k); } catch(e) { return null; } }, set(k,v){ try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k,v); } catch(e) {} } };
-const ERR = { ADMIN_UNAUTHORIZED:"ADMIN_KEY غلط", UNAUTHORIZED:"API_TOKEN غلط", SERVER_BUSY:"الخادم مشغول، أعد المحاولة", INVALID_CODE_DURATION:"مدة غير صالحة", INVALID_TRIAL_DAYS:"مدة غير صالحة", INVALID_EXTENSION_DAYS:"مدة غير صالحة", DEVICE_NOT_FOUND:"الجهاز غير موجود", CODE_ALREADY_REDEEMED:"الكود مستخدم", INVALID_DEVICE_ID:"رقم جهاز غير صالح" };
+const ERR = { REQUEST_ALREADY_DECIDED:"الطلب انحسم من قبل", REQUEST_NOT_FOUND:"الطلب مش موجود", ADMIN_UNAUTHORIZED:"ADMIN_KEY غلط", UNAUTHORIZED:"API_TOKEN غلط", SERVER_BUSY:"الخادم مشغول، أعد المحاولة", INVALID_CODE_DURATION:"مدة غير صالحة", INVALID_TRIAL_DAYS:"مدة غير صالحة", INVALID_EXTENSION_DAYS:"مدة غير صالحة", DEVICE_NOT_FOUND:"الجهاز غير موجود", CODE_ALREADY_REDEEMED:"الكود مستخدم", INVALID_DEVICE_ID:"رقم جهاز غير صالح" };
 const GL = { trial:"تجربة", paid:"VIP", expired:"منتهي", blocked:"محظور" };
 let key = store.get("mtk"), data = null, tab = "dev", sel = null;
 
@@ -208,12 +214,34 @@ function codeCard(c) {
     <div class="meta"><span class="mono">${c.deviceId ? fmtId(c.deviceId) : "لأي جهاز"}</span><span>${c.days ? c.days + " يوم" : "مؤبد"} · ${dt(c.created)}</span></div>
     ${c.status === "UNUSED" ? `<div style="margin-top:10px"><button class="btn ghost" data-rv="${esc(c.codeId)}" style="height:40px;width:100%">إلغاء الكود</button></div>` : ""}</div>`;
 }
+const when = ms => ms ? "<bdi>" + new Date(ms).toLocaleString("en-GB", { day:"2-digit", month:"short", hour:"2-digit", minute:"2-digit" }) + "</bdi>" : "—";
+function reqCard(r) {
+  const tail = esc(r.deviceId.replace(/-/g, "").slice(-4));
+  const wa = "https://wa.me/" + esc(r.phone.replace(/^\+/, "").replace(/^0/, "962"));
+  const head = `<div class="row"><div class="nm"><bdi>${esc(r.name)}</bdi></div>${r.status === "PENDING" ? '<span class="new">NEW</span>' : `<span class="rq-st rq-${esc(r.status)}">${r.status === "APPROVED" ? (r.plan === "life" ? "مفعّل مدى الحياة ✓" : "مفعّل 3 أيام ✓") : "مرفوض"}</span>`}</div>
+    <div class="meta"><span><bdi>${esc(r.model || "Android")}</bdi>${r.app ? " · v" + esc(r.app) : ""}</span><span>${when(r.at)}</span></div>
+    <div class="meta"><span class="mono" dir="ltr">${esc(r.phone)}</span><span class="mono" dir="ltr">…${tail}</span></div>`;
+  if (r.status !== "PENDING") return `<div class="card rq">${head}</div>`;
+  return `<div class="card rq">${head}
+    <div class="ph"><a href="tel:${esc(r.phone)}">اتصال</a><a href="${wa}" target="_blank" rel="noopener">واتساب</a></div>
+    <div class="acts"><button class="btn" data-ap="3d" data-rq="${esc(r.id)}">فعّل 3 أيام</button><button class="btn life" data-ap="life" data-rq="${esc(r.id)}">فعّل مدى الحياة</button>
+    <button class="btn rej" data-rj="${esc(r.id)}">رفض</button></div></div>`;
+}
 function render() {
   if (!data) return;
   $("#fab").classList.toggle("show", tab === "codes");
   document.querySelector('.seg button[data-t="codes"]').classList.toggle("hide", !!data.legacy);
   const q = $("#q").value.trim().toUpperCase().replace(/[\s·-]/g, "");
   const L = $("#list");
+  const reqs = data.requests || [];
+  const pend = reqs.filter(r => r.status === "PENDING").length;
+  $("#rqn").textContent = pend; $("#rqn").classList.toggle("hide", !pend);
+  document.querySelector('.seg button[data-t="req"]').classList.toggle("hide", !!data.legacy);
+  if (tab === "req") {
+    const rs = reqs.filter(r => !q || (r.name + r.phone + r.deviceId).toUpperCase().replace(/[\s-]/g, "").indexOf(q) >= 0);
+    L.innerHTML = rs.length ? rs.map(reqCard).join("") : '<div class="empty">ما في طلبات</div>';
+    return;
+  }
   if (tab === "codes") {
     const cs = data.codes.filter(c => !q || (c.codeId + c.deviceId).toUpperCase().replace(/-/g, "").indexOf(q) >= 0);
     L.innerHTML = cs.length ? cs.map(codeCard).join("") : '<div class="empty">لا توجد أكواد</div>';
@@ -229,8 +257,13 @@ function render() {
   });
   L.innerHTML = html || '<div class="empty">لا توجد أجهزة</div>';
 }
+let autoReq = true;
 function load() {
-  return api("overview").then(r => { data = r; render(); }, fail);
+  return api("overview").then(r => {
+    data = r;
+    if (autoReq && (r.requests || []).some(x => x.status === "PENDING")) { autoReq = false; return setTab("req"); }
+    autoReq = false; render();
+  }, fail);
 }
 
 // Full-page view with its own back button; the phone's back button closes it too.
@@ -325,6 +358,15 @@ $("#sheet").addEventListener("click", e => {
 
 $("#list").addEventListener("click", e => {
   const cp = e.target.closest("[data-c]"); if (cp) { if (cp.dataset.c) copy(cp.dataset.c); return; }
+  const ap = e.target.closest("[data-ap]"), rj = e.target.closest("[data-rj]");
+  if (ap || rj) {
+    const b = ap || rj;
+    b.closest(".acts").querySelectorAll("button").forEach(x => x.disabled = true);
+    const op = ap ? api("approve_request", { requestId: ap.dataset.rq, plan: ap.dataset.ap }) : api("reject_request", { requestId: rj.dataset.rj });
+    op.then(() => { toast(ap ? (ap.dataset.ap === "life" ? "تم التفعيل مدى الحياة" : "تم التفعيل 3 أيام") : "تم الرفض"); load(); },
+      e => { b.closest(".acts").querySelectorAll("button").forEach(x => x.disabled = false); fail(e); });
+    return;
+  }
   const rv = e.target.closest("[data-rv]");
   if (rv) { rv.disabled = true; api("revoke_code", { codeId: rv.dataset.rv }).then(() => { toast("تم الإلغاء"); load(); }, fail); return; }
   const c = e.target.closest(".card[data-id]");
@@ -343,7 +385,8 @@ function enter() {
   if (t) { mode = "legacy"; tok = t; }
   api("overview").then(r => {
     store.set("mtk", v); store.set("mtm", mode); if (mode === "legacy") store.set("mtk2", tok);
-    $("#login").classList.add("hide"); data = r; render();
+    $("#login").classList.add("hide"); data = r;
+    if ((r.requests || []).some(x => x.status === "PENDING")) setTab("req"); else render();
   }, e => {
     const m = String(e && e.message);
     // Current server checks the API token before anything else, so the console route answers UNAUTHORIZED.
