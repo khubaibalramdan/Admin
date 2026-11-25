@@ -92,7 +92,8 @@ button,input{font:inherit;color:inherit}
 .rq .ph{display:flex;gap:8px;margin-top:8px}.rq .ph a{flex:1;display:flex;align-items:center;justify-content:center;height:38px;border-radius:10px;background:var(--soft);color:var(--ink);text-decoration:none;font-size:13px;font-weight:600}
 .rq .acts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.rq .acts .btn{height:44px;font-size:14px}
 .rq .acts .life{background:var(--paid);color:#fff}.rq .acts .rej{grid-column:1/-1;height:36px;background:none;color:var(--blk);font-weight:600}
-.rq-st{font-size:12px;font-weight:700}.rq-APPROVED{color:var(--paid)}.rq-REJECTED{color:var(--blk)}
+.rq-st{font-size:12px;font-weight:700}.rq-APPROVED{color:var(--paid)}.rq-REJECTED,.rq-REVOKED{color:var(--blk)}
+.rq .acts .btn.sure{background:var(--blk);color:#fff}
 .badge{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--blk);color:#fff;font:700 11px/1 Montserrat,sans-serif;margin-inline-start:4px}
 .lab{font:600 11px/1 Montserrat,sans-serif;letter-spacing:.16em;color:var(--mute);text-align:left;direction:ltr;margin:4px 2px -8px}
 </style>
@@ -135,7 +136,7 @@ button,input{font:inherit;color:inherit}
 const $ = s => document.querySelector(s);
 const esc = v => String(v == null ? "" : v).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const store = { get(k){ try { return localStorage.getItem(k); } catch(e) { return null; } }, set(k,v){ try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k,v); } catch(e) {} } };
-const ERR = { REQUEST_ALREADY_DECIDED:"الطلب انحسم من قبل", REQUEST_NOT_FOUND:"الطلب مش موجود", ADMIN_UNAUTHORIZED:"ADMIN_KEY غلط", UNAUTHORIZED:"API_TOKEN غلط", SERVER_BUSY:"الخادم مشغول، أعد المحاولة", INVALID_CODE_DURATION:"مدة غير صالحة", INVALID_TRIAL_DAYS:"مدة غير صالحة", INVALID_EXTENSION_DAYS:"مدة غير صالحة", DEVICE_NOT_FOUND:"الجهاز غير موجود", CODE_ALREADY_REDEEMED:"الكود مستخدم", INVALID_DEVICE_ID:"رقم جهاز غير صالح" };
+const ERR = { REQUEST_NOT_APPROVED:"الطلب مش مفعّل", REQUEST_ALREADY_DECIDED:"الطلب انحسم من قبل", REQUEST_NOT_FOUND:"الطلب مش موجود", ADMIN_UNAUTHORIZED:"ADMIN_KEY غلط", UNAUTHORIZED:"API_TOKEN غلط", SERVER_BUSY:"الخادم مشغول، أعد المحاولة", INVALID_CODE_DURATION:"مدة غير صالحة", INVALID_TRIAL_DAYS:"مدة غير صالحة", INVALID_EXTENSION_DAYS:"مدة غير صالحة", DEVICE_NOT_FOUND:"الجهاز غير موجود", CODE_ALREADY_REDEEMED:"الكود مستخدم", INVALID_DEVICE_ID:"رقم جهاز غير صالح" };
 const GL = { trial:"تجربة", paid:"VIP", expired:"منتهي", blocked:"محظور" };
 let key = store.get("mtk"), data = null, tab = "dev", sel = null;
 
@@ -218,9 +219,10 @@ const when = ms => ms ? "<bdi>" + new Date(ms).toLocaleString("en-GB", { day:"2-
 function reqCard(r) {
   const tail = esc(r.deviceId.replace(/-/g, "").slice(-4));
   const wa = "https://wa.me/" + esc(r.phone.replace(/^\+/, "").replace(/^0/, "962"));
-  const head = `<div class="row"><div class="nm"><bdi>${esc(r.name)}</bdi></div>${r.status === "PENDING" ? '<span class="new">NEW</span>' : `<span class="rq-st rq-${esc(r.status)}">${r.status === "APPROVED" ? (r.plan === "life" ? "مفعّل مدى الحياة ✓" : "مفعّل 3 أيام ✓") : "مرفوض"}</span>`}</div>
+  const head = `<div class="row"><div class="nm"><bdi>${esc(r.name)}</bdi></div>${r.status === "PENDING" ? '<span class="new">NEW</span>' : `<span class="rq-st rq-${esc(r.status)}">${r.status === "APPROVED" ? (r.plan === "life" ? "مفعّل مدى الحياة ✓" : "مفعّل 3 أيام ✓") : r.status === "REVOKED" ? "انلغى التفعيل" : "مرفوض"}</span>`}</div>
     <div class="meta"><span><bdi>${esc(r.model || "Android")}</bdi>${r.app ? " · v" + esc(r.app) : ""}</span><span>${when(r.at)}</span></div>
     <div class="meta"><span class="mono" dir="ltr">${esc(r.phone)}</span><span class="mono" dir="ltr">…${tail}</span></div>`;
+  if (r.status === "APPROVED") return `<div class="card rq">${head}<div class="acts"><button class="btn rej" data-rk="${esc(r.id)}">إلغاء التفعيل</button></div></div>`;
   if (r.status !== "PENDING") return `<div class="card rq">${head}</div>`;
   return `<div class="card rq">${head}
     <div class="ph"><a href="tel:${esc(r.phone)}">اتصال</a><a href="${wa}" target="_blank" rel="noopener">واتساب</a></div>
@@ -358,7 +360,17 @@ $("#sheet").addEventListener("click", e => {
 
 $("#list").addEventListener("click", e => {
   const cp = e.target.closest("[data-c]"); if (cp) { if (cp.dataset.c) copy(cp.dataset.c); return; }
-  const ap = e.target.closest("[data-ap]"), rj = e.target.closest("[data-rj]");
+  const ap = e.target.closest("[data-ap]"), rj = e.target.closest("[data-rj]"), rk = e.target.closest("[data-rk]");
+  // Lifetime and cancel ask for a second tap (no activation or cancel by mistake).
+  const sure = x => { if (x.dataset.ok) return true; x.dataset.ok = "1"; x.classList.add("sure"); x.textContent = "متأكد؟ اكبس كمان مرة"; setTimeout(() => { if (x.isConnected && x.dataset.ok) { delete x.dataset.ok; x.classList.remove("sure"); x.textContent = x.dataset.t; } }, 5000); return false; };
+  if (rk) {
+    if (!rk.dataset.t) rk.dataset.t = rk.textContent;
+    if (!sure(rk)) return;
+    rk.disabled = true;
+    api("revoke_request", { requestId: rk.dataset.rk }).then(() => { toast("انلغى التفعيل"); load(); }, e2 => { rk.disabled = false; fail(e2); });
+    return;
+  }
+  if (ap && ap.dataset.ap === "life") { if (!ap.dataset.t) ap.dataset.t = ap.textContent; if (!sure(ap)) return; }
   if (ap || rj) {
     const b = ap || rj;
     b.closest(".acts").querySelectorAll("button").forEach(x => x.disabled = true);
