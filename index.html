@@ -188,6 +188,7 @@ button,input{font:inherit;color:inherit}
 .dlg .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .addd{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
 .lab{font:600 11px/1 Montserrat,sans-serif;letter-spacing:.16em;color:var(--mute);text-align:left;direction:ltr;margin:4px 2px -8px}
+.pay{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:13px;padding:7px 10px;border-radius:12px;background:rgba(242,184,75,.1);border:1px solid rgba(242,184,75,.28)}.pay b{color:var(--gold-hi)}.pay span{color:var(--ink);font-weight:600;direction:auto}.pay.cash{background:rgba(120,200,150,.1);border-color:rgba(120,200,150,.3)}.pay.none{color:var(--mute);background:transparent;border-style:dashed}
 </style>
 </head>
 <body>
@@ -311,6 +312,7 @@ const localPhone = p => { let d = String(p || "").replace(/\D/g, ""); if (d.inde
   if (d.length === 9 && d[0] === "7") d = "0" + d; return d.length === 10 ? d.slice(0, 3) + " " + d.slice(3, 6) + " " + d.slice(6) : String(p || ""); };
 // Name and phone come from the captain's own activation request (if he sent one).
 function who(id) { const rs = ((data && data.requests) || []).filter(r => r.deviceId === id && r.phone); return rs.sort((a, b) => b.at - a.at)[0] || null; }
+const payLine = r => { const m = { cliq: "كليك", wallet: "محفظة", cash: "كاش" }[r.payMethod]; return m ? `<div class="pay ${r.payMethod === "cash" ? "cash" : ""}"><b>الدفع: ${m}</b>${r.payRef ? `<span>${esc(r.payRef)}</span>` : "<span>بعد الاستلام</span>"}</div>` : '<div class="pay none">طريقة الدفع غير محددة (نسخة قديمة)</div>'; };
 const t1 = w => w ? `<div class="t1">${esc(localPhone(w.phone))}</div>` : '<div class="t1 none">بدون رقم تلفون</div>';
 const sub = (d, w) => [w && w.name, d.model || "جهاز أندرويد"].filter(Boolean).join(" · ");
 const stTxt = d => d.group === "trial" ? left(d) : d.group === "expired" ? "منتهي" : d.group === "blocked" ? "محظور" : "";
@@ -338,7 +340,7 @@ const when = ms => ms ? "<bdi>" + new Date(ms).toLocaleString("en-GB", { day:"2-
 function reqCard(r) {
   const wa = "https://wa.me/" + esc(String(r.phone).replace(/\D/g, "").replace(/^0/, "962"));
   return `<div class="card rq"><div class="rh"><div class="tx"><div class="sd"><span class="lbl"><i></i>طلب جديد</span><small>${when(r.at)}</small></div>
-    <div class="t1">${esc(localPhone(r.phone))}</div><div class="t3">${esc(r.name)}</div><div class="t2">${esc(r.model || "جهاز أندرويد")}</div></div></div>
+    <div class="t1">${esc(localPhone(r.phone))}</div><div class="t3">${esc(r.name)}</div><div class="t2">${esc(r.model || "جهاز أندرويد")}</div>${payLine(r)}</div></div>
     <div class="ph2"><a href="tel:${esc(r.phone)}">${IC.call}اتصال</a><a href="${wa}" target="_blank" rel="noopener">${IC.wa}واتساب</a></div>
     <div class="acts"><button class="btn life" data-ap="life" data-rq="${esc(r.id)}">تفعيل VIP</button>
     <button class="btn rej" data-rj="${esc(r.id)}">رفض</button></div></div>`;
