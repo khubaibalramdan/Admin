@@ -14,12 +14,13 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;600;700&family=Noto+Kufi+Arabic:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;600;700&family=Noto+Kufi+Arabic:wght@400;500;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;600;700&family=Noto+Kufi+Arabic:wght@400;500;700;800&display=swap" rel="stylesheet"></noscript>
 <style>
 :root{--bg:#120c08;--card:linear-gradient(180deg,rgba(46,31,18,.86),rgba(16,10,7,.9));--solid:#1c130c;--ink:#fbf3e4;--mute:#cdbfa8;--faint:#9a8b74;
 --line:rgba(242,184,75,.22);--soft:rgba(255,226,170,.08);--gold:#f2b84b;--gold-hi:#ffd98a;--gold-deep:#b97a1f;--gold-d:#b97a1f;
 --trial:#f2b84b;--trial-bg:rgba(242,184,75,.14);--paid:#3fcf8e;--paid-bg:rgba(63,207,142,.14);--exp:#b3a690;--exp-bg:rgba(255,236,200,.08);--blk:#ff6b52;--blk-bg:rgba(255,107,82,.14);
---goldbtn:linear-gradient(180deg,var(--gold-hi),var(--gold) 55%,var(--gold-deep));--sh:0 0 0 1px rgba(242,184,75,.18),0 10px 30px rgba(0,0,0,.35)}
+--goldbtn:linear-gradient(180deg,var(--gold-hi),var(--gold) 55%,var(--gold-deep));--sh:0 0 0 1px rgba(242,184,75,.18),0 6px 14px rgba(0,0,0,.3)}
 .bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(180deg,rgba(18,13,10,.12) 0%,rgba(18,13,10,.05) 30%,rgba(18,13,10,.62) 62%,rgba(12,8,6,.93) 100%),url(bg-sunset.webp) center 35%/cover no-repeat,#120c08}
 *{box-sizing:border-box;min-width:0;-webkit-tap-highlight-color:transparent}
 html{background:#120c08}html,body{margin:0;height:100%;color:var(--ink);font:15px/1.5 "Noto Kufi Arabic",system-ui,sans-serif;overflow:hidden}
@@ -41,7 +42,7 @@ button,input{font:inherit;color:inherit}
 .search{width:100%;height:42px;border-radius:14px;border:1px solid var(--line);background:rgba(12,8,6,.55);padding:0 40px 0 12px;font-size:15px;outline:none}
 .search::placeholder{color:var(--faint);font-family:"Noto Kufi Arabic",sans-serif;font-size:13px}
 .search:focus{border-color:var(--gold)}
-.list{background:linear-gradient(180deg,rgba(26,17,10,.8),rgba(14,9,6,.88));border:1px solid rgba(242,184,75,.16);border-radius:18px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);overflow-y:auto;padding:2px 2px calc(env(safe-area-inset-bottom,0px) + 40px);overscroll-behavior:contain}
+.list{background:linear-gradient(180deg,rgba(26,17,10,.8),rgba(14,9,6,.88));border:1px solid rgba(242,184,75,.16);border-radius:18px;position:relative;z-index:1;overflow-y:auto;padding:2px 2px calc(env(safe-area-inset-bottom,0px) + 40px);overscroll-behavior:contain}
 .grp{background:var(--card);border-radius:18px;overflow:hidden;box-shadow:var(--sh)}
 .card{background:var(--card);border-radius:18px;padding:14px;margin-bottom:10px;box-shadow:var(--sh)}
 .it{display:flex;align-items:center;gap:12px;padding:13px 14px;cursor:pointer;position:relative}
